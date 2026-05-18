@@ -1,0 +1,1874 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+
+    <!-- ====================================================== -->
+    <!-- WEEKLY REPORT -->
+    <!-- ====================================================== -->
+
+    <t t-name="pm_report.WeeklyReport">
+
+        <div class="o_weekly_report">
+
+            <div class="o_weekly_report_paper">
+
+                <!-- ====================================================== -->
+                <!-- HEADER -->
+                <!-- ====================================================== -->
+
+                <div class="o_wr_top">
+
+                    <!-- LEFT -->
+
+                    <div class="o_wr_top_left">
+
+                        <div class="o_wr_small_title">
+                            WEEKLY REPORT
+                        </div>
+
+                        <div class="o_wr_vendor">
+                            <t t-esc="state.project.vendor || ''"/>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT -->
+
+                    <div class="o_wr_top_right">
+
+                        <table>
+
+                            <tbody>
+
+                                <tr>
+
+                                    <td class="label">
+                                        Project
+                                    </td>
+
+                                    <td>
+                                        :
+                                        <t t-esc="state.project.name || ''"/>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <td class="label">
+                                        PO No
+                                    </td>
+
+                                    <td>
+                                        :
+                                        <t t-esc="state.project.po_number || ''"/>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <td class="label">
+                                        PO Date
+                                    </td>
+
+                                    <td>
+                                        :
+                                        <t t-esc="formatDate(state.project.start_date)"/>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <td class="label">
+                                        Rev
+                                    </td>
+
+                                    <td>
+                                        : 0
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <!-- ====================================================== -->
+                <!-- TITLE -->
+                <!-- ====================================================== -->
+
+                <div class="o_wr_center">
+
+                    <div class="o_wr_title">
+                        WEEKLY REPORT
+                    </div>
+
+                    <div class="o_wr_week">
+
+                        WEEK
+
+                        <t t-esc="
+                            state.current_week &lt; 10
+                            ? '0' + state.current_week
+                            : state.current_week
+                        "/>
+
+                    </div>
+
+                </div>
+
+                <!-- ====================================================== -->
+                <!-- LOGOS -->
+                <!-- ====================================================== -->
+
+                <div class="o_wr_logos">
+
+                    <t t-if="state.project.logo_left">
+
+                        <img
+                            class="o_wr_logo"
+                            t-att-src="'data:image/png;base64,' + state.project.logo_left"
+                        />
+
+                    </t>
+
+                    <t t-if="state.project.logo_right">
+
+                        <img
+                            class="o_wr_logo"
+                            t-att-src="'data:image/png;base64,' + state.project.logo_right"
+                        />
+
+                    </t>
+
+                </div>
+
+                <!-- ====================================================== -->
+                <!-- PROJECT INFO -->
+                <!-- ====================================================== -->
+
+                <div class="o_wr_info">
+
+                    <table class="o_wr_info_table">
+
+                        <tbody>
+
+                            <tr>
+
+                                <td class="info_label">
+                                    Client
+                                </td>
+
+                                <td class="info_separator">
+                                    :
+                                </td>
+
+                                <td class="info_value">
+                                    <t t-esc="state.project.client_id?.[1] || ''"/>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td class="info_label">
+                                    Project
+                                </td>
+
+                                <td class="info_separator">
+                                    :
+                                </td>
+
+                                <td class="info_value">
+                                    <t t-esc="state.project.name || ''"/>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td class="info_label">
+                                    PO Number
+                                </td>
+
+                                <td class="info_separator">
+                                    :
+                                </td>
+
+                                <td class="info_value">
+                                    <t t-esc="state.project.po_number || ''"/>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td class="info_label">
+                                    Duration
+                                </td>
+
+                                <td class="info_separator">
+                                    :
+                                </td>
+
+                                <td class="info_value">
+
+                                    <t t-esc="formatDate(state.project.start_date)"/>
+
+                                    s/d
+
+                                    <t t-esc="formatDate(state.project.end_date)"/>
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td class="info_label">
+                                    Location
+                                </td>
+
+                                <td class="info_separator">
+                                    :
+                                </td>
+
+                                <td class="info_value">
+                                    <t t-esc="state.project.project_location || ''"/>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td class="info_label">
+                                    Period
+                                </td>
+
+                                <td class="info_separator">
+                                    :
+                                </td>
+
+                                <td class="info_value">
+
+                                    <t t-esc="formatDate(state.period_start)"/>
+
+                                    s/d
+
+                                    <t t-esc="formatDate(state.period_end)"/>
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td class="info_label">
+                                    Report Date
+                                </td>
+
+                                <td class="info_separator">
+                                    :
+                                </td>
+
+                                <td class="info_value">
+                                    <t t-esc="formatDate(state.today)"/>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <!-- ====================================================== -->
+                <!-- APPROVAL -->
+                <!-- ====================================================== -->
+
+                <div class="o_wr_approval">
+
+                    <table class="o_wr_approval_table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Description</th>
+                                <th>Prepared</th>
+                                <th>Checked &amp; Acknowledged</th>
+                                <th>Checked</th>
+                                <th>Approved</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <!-- COMPANY -->
+
+                            <tr>
+
+                                <td>
+                                    Company
+                                </td>
+
+                                <td>
+
+                                    <input
+                                        class="o_wr_input"
+                                        type="text"
+                                        t-att-value="state.project.prepared_company || ''"
+                                        t-on-blur="(ev) => this.updateField('prepared_company', ev)"
+                                    />
+
+                                </td>
+
+                                <td>
+
+                                    <input
+                                        class="o_wr_input"
+                                        type="text"
+                                        t-att-value="state.project.acknowledged_company || ''"
+                                        t-on-blur="(ev) => this.updateField('acknowledged_company', ev)"
+                                    />
+
+                                </td>
+
+                                <td>
+
+                                    <input
+                                        class="o_wr_input"
+                                        type="text"
+                                        t-att-value="state.project.checked_company || ''"
+                                        t-on-blur="(ev) => this.updateField('checked_company', ev)"
+                                    />
+
+                                </td>
+
+                                <td>
+
+                                    <input
+                                        class="o_wr_input"
+                                        type="text"
+                                        t-att-value="state.project.approved_company || ''"
+                                        t-on-blur="(ev) => this.updateField('approved_company', ev)"
+                                    />
+
+                                </td>
+
+                            </tr>
+
+                            <!-- SIGN -->
+
+                            <tr class="sign_row">
+
+                                <td>
+                                    Sign
+                                </td>
+
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+
+                            </tr>
+
+                            <!-- NAME -->
+
+                            <tr>
+
+                                <td>
+                                    Name
+                                </td>
+
+                                <td>
+
+                                    <input
+                                        class="o_wr_input"
+                                        type="text"
+                                        t-att-value="state.project.prepared_by || ''"
+                                        t-on-blur="(ev) => this.updateField('prepared_by', ev)"
+                                    />
+
+                                </td>
+
+                                <td>
+
+                                    <input
+                                        class="o_wr_input"
+                                        type="text"
+                                        t-att-value="state.project.acknowledged_by || ''"
+                                        t-on-blur="(ev) => this.updateField('acknowledged_by', ev)"
+                                    />
+
+                                </td>
+
+                                <td>
+
+                                    <input
+                                        class="o_wr_input"
+                                        type="text"
+                                        t-att-value="state.project.checked_by || ''"
+                                        t-on-blur="(ev) => this.updateField('checked_by', ev)"
+                                    />
+
+                                </td>
+
+                                <td>
+
+                                    <input
+                                        class="o_wr_input"
+                                        type="text"
+                                        t-att-value="state.project.approved_by || ''"
+                                        t-on-blur="(ev) => this.updateField('approved_by', ev)"
+                                    />
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <!-- ====================================================== -->
+                <!-- CONTENT -->
+                <!-- ====================================================== -->
+
+                <div class="o_wr_content_page">
+
+                    <div class="o_wr_content_title">
+                        CONTENT
+                    </div>
+
+                    <div class="o_wr_content_body">
+
+                        <!-- I -->
+
+                        <div class="o_wr_content_row">
+                            <span>I.</span>
+                            <span>Highlight activities this period</span>
+                            <span class="dots"></span>
+                            <span></span>
+                        </div>
+
+                        <div class="o_wr_content_sub">1. Safety Record</div>
+                        <div class="o_wr_content_sub_indent">a) Manpower</div>
+                        <div class="o_wr_content_sub_indent">b) Man-Hour Record</div>
+                        <div class="o_wr_content_sub">2. Issue Register</div>
+                        <div class="o_wr_content_sub">3. General Work</div>
+
+                        <!-- II -->
+
+                        <div class="o_wr_content_row">
+                            <span>II.</span>
+                            <span>Project Overview and Summary Update Status</span>
+                            <span class="dots"></span>
+                            <span></span>
+                        </div>
+
+                        <div class="o_wr_content_sub">1. Summary</div>
+
+                        <!-- III -->
+
+                        <div class="o_wr_content_row">
+                            <span>III.</span>
+                            <span>Area of Concern and Problem Identification</span>
+                            <span class="dots"></span>
+                            <span></span>
+                        </div>
+
+                        <div class="o_wr_content_sub">
+                            1. Work Summary during Report Activity and Schedule for the Following Week
+                        </div>
+
+                        <!-- IV -->
+
+                        <div class="o_wr_content_row">
+                            <span>IV.</span>
+                            <span>Attachments</span>
+                            <span class="dots"></span>
+                            <span></span>
+                        </div>
+
+                        <div class="o_wr_content_sub">1. Material Status</div>
+                        <div class="o_wr_content_sub">2. Timeline</div>
+                        <div class="o_wr_content_sub">3. S-Curve</div>
+                        <div class="o_wr_content_sub">4. Documentation</div>
+
+                    </div>
+
+                </div>
+
+                <!-- ====================================================== -->
+                <!-- REPORT BODY -->
+                <!-- ====================================================== -->
+
+                <div class="o_wr_report_body">
+
+                    <!-- ====================================================== -->
+                    <!-- SECTION -->
+                    <!-- ====================================================== -->
+
+                    <div class="o_wr_section_block">
+
+                        <div class="o_wr_section_main">
+                            I. Highlight activities this period
+                        </div>
+
+                        <div class="o_wr_section_sub">
+                            1. Safety Record
+                        </div>
+
+                    </div>
+
+                    <!-- ====================================================== -->
+                    <!-- MANPOWER -->
+                    <!-- ====================================================== -->
+
+                    <div class="o_wr_subsection">
+
+                        <div class="o_wr_sub_point">
+                            a) Manpower
+                        </div>
+
+                        <div class="o_wr_manpower_section">
+
+                            <table class="o_wr_status_manpower_table">
+
+                                <thead>
+
+                                    <tr>
+                                        <th colspan="7">
+                                            Status Manpower
+                                        </th>
+                                    </tr>
+
+                                    <tr>
+                                        <th>MCU Process</th>
+                                        <th>Input Berkas</th>
+                                        <th>Induction Process</th>
+                                        <th>ID Card Process Mutation</th>
+                                        <th>ID Card</th>
+                                        <th>WASKAT</th>
+                                        <th>Note</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    <tr>
+
+                                        <td>
+                                            <input
+                                                class="o_wr_input"
+                                                type="number"
+                                                t-att-value="state.project.mcu_process || 0"
+                                                t-on-blur="(ev) => this.updateField('mcu_process', ev)"
+                                            />
+                                        </td>
+
+                                        <td>
+                                            <input
+                                                class="o_wr_input"
+                                                type="number"
+                                                t-att-value="state.project.input_berkas || 0"
+                                                t-on-blur="(ev) => this.updateField('input_berkas', ev)"
+                                            />
+                                        </td>
+
+                                        <td>
+                                            <input
+                                                class="o_wr_input"
+                                                type="number"
+                                                t-att-value="state.project.induction_process || 0"
+                                                t-on-blur="(ev) => this.updateField('induction_process', ev)"
+                                            />
+                                        </td>
+
+                                        <td>
+                                            <input
+                                                class="o_wr_input"
+                                                type="number"
+                                                t-att-value="state.project.id_card_process || 0"
+                                                t-on-blur="(ev) => this.updateField('id_card_process', ev)"
+                                            />
+                                        </td>
+
+                                        <td>
+                                            <input
+                                                class="o_wr_input"
+                                                type="number"
+                                                t-att-value="state.project.id_card || 0"
+                                                t-on-blur="(ev) => this.updateField('id_card', ev)"
+                                            />
+                                        </td>
+
+                                        <td>
+                                            <input
+                                                class="o_wr_input"
+                                                type="number"
+                                                t-att-value="state.project.waskat || 0"
+                                                t-on-blur="(ev) => this.updateField('waskat', ev)"
+                                            />
+                                        </td>
+
+                                        <td>
+                                            <input
+                                                class="o_wr_input"
+                                                type="text"
+                                                t-att-value="state.project.manpower_note || ''"
+                                                t-on-blur="(ev) => this.updateField('manpower_note', ev)"
+                                            />
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                            
+                            <!-- ACTION -->
+
+                            <div class="o_wr_action_bar">
+
+                                <button
+                                    class="o_wr_btn"
+                                    t-on-click="addTable">
+
+                                    Add Section
+
+                                </button>
+
+                            </div>
+
+                            <!-- EMPTY -->
+
+                            <t t-if="!state.tables.length">
+
+                                <div class="o_wr_empty">
+
+                                    No section available
+
+                                </div>
+
+                            </t>
+
+                            <!-- TABLES -->
+
+                            <t t-foreach="state.tables || []"
+                               t-as="table"
+                               t-key="table.id">
+
+                                <div class="o_wr_dynamic_table_block">
+
+                                    <!-- HEADER ACTION -->
+
+                                    <div class="o_wr_dynamic_header">
+
+                                        <button
+                                            class="o_wr_btn"
+                                            t-att-data-table-id="table.id"
+                                            t-on-click="addRow">
+
+                                            Add Row
+
+                                        </button>
+
+                                        <button
+                                            class="o_wr_btn"
+                                            t-att-data-table-id="table.id"
+                                            t-on-click="addColumn">
+
+                                            Add Competency
+
+                                        </button>
+
+                                        <button
+                                            class="o_wr_btn danger"
+                                            t-att-data-table-id="table.id"
+                                            t-on-click="deleteTable">
+
+                                            Delete Section
+
+                                        </button>
+
+                                    </div>
+
+                                    <!-- TABLE -->
+
+                                    <table class="o_wr_dynamic_table">
+
+                                        <thead>
+
+                                            <!-- TITLE -->
+
+                                            <tr>
+
+                                                <th
+                                                    class="section_title"
+                                                    t-att-colspan="
+                                                        Math.max(table.columns?.length || 0, 1) + 3
+                                                    ">
+
+                                                    <input
+                                                        class="section_title_input"
+                                                        type="text"
+                                                        t-att-value="table.name || ''"
+                                                        t-on-blur="
+                                                            (ev) => this.updateTable(
+                                                                table.id,
+                                                                'name',
+                                                                ev
+                                                            )
+                                                        "
+                                                    />
+
+                                                </th>
+
+                                            </tr>
+
+                                            <!-- HEADER -->
+
+                                            <tr>
+
+                                                <th rowspan="2">
+                                                    Name
+                                                </th>
+
+                                                <th rowspan="2">
+                                                    Position
+                                                </th>
+
+                                                <th
+                                                    class="competency_group"
+                                                    t-att-colspan="table.columns?.length || 1">
+
+                                                    Competency Types
+
+                                                </th>
+
+                                                <th rowspan="2">
+                                                    Note
+                                                </th>
+
+                                            </tr>
+
+                                            <!-- COMPETENCY -->
+
+                                            <tr>
+
+                                                <t t-if="table.columns?.length">
+
+                                                    <t t-foreach="table.columns || []"
+                                                       t-as="col"
+                                                       t-key="col.id">
+
+                                                        <th>
+
+                                                            <input
+                                                                class="o_wr_input"
+                                                                type="text"
+                                                                t-att-value="col.name || ''"
+                                                                t-on-blur="
+                                                                    (ev) => this.updateColumn(
+                                                                        col.id,
+                                                                        ev
+                                                                    )
+                                                                "
+                                                            />
+
+                                                        </th>
+
+                                                    </t>
+
+                                                </t>
+
+                                                <t t-else="">
+
+                                                    <th>
+                                                        No Competency
+                                                    </th>
+
+                                                </t>
+
+                                            </tr>
+
+                                        </thead>
+
+                                        <tbody>
+
+                                            <t t-foreach="table.lines || []"
+                                               t-as="line"
+                                               t-key="line.id">
+
+                                                <tr>
+
+                                                    <!-- NAME -->
+
+                                                    <td>
+
+                                                        <input
+                                                            class="o_wr_input"
+                                                            type="text"
+                                                            t-att-value="line.name || ''"
+                                                            t-on-blur="
+                                                                (ev) => this.updateLine(
+                                                                    line.id,
+                                                                    'name',
+                                                                    ev
+                                                                )
+                                                            "
+                                                        />
+
+                                                    </td>
+
+                                                    <!-- POSITION -->
+
+                                                    <td>
+
+                                                        <input
+                                                            class="o_wr_input"
+                                                            type="text"
+                                                            t-att-value="line.position || ''"
+                                                            t-on-blur="
+                                                                (ev) => this.updateLine(
+                                                                    line.id,
+                                                                    'position',
+                                                                    ev
+                                                                )
+                                                            "
+                                                        />
+
+                                                    </td>
+
+                                                    <!-- CHECKBOX -->
+
+                                                    <t t-if="table.columns?.length">
+
+                                                        <t t-foreach="table.columns || []"
+                                                        t-as="col"
+                                                        t-key="col.id">
+
+                                                            <td class="checkbox_cell">
+
+                                                                <input
+                                                                    type="checkbox"
+                                                                    t-att-checked="line.values?.[col.id] || false"
+                                                                    t-on-change="
+                                                                        (ev) => this.toggleValue(
+                                                                            line.id,
+                                                                            col.id,
+                                                                            ev
+                                                                        )
+                                                                    "
+                                                                />
+
+                                                            </td>
+
+                                                        </t>
+
+                                                    </t>
+
+                                                    <t t-else="">
+                                                        <td></td>
+                                                    </t>
+
+                                                    <!-- NOTE -->
+
+                                                    <td>
+
+                                                        <input
+                                                            class="o_wr_input"
+                                                            type="text"
+                                                            t-att-value="line.note || ''"
+                                                            t-on-blur="
+                                                                (ev) => this.updateLine(
+                                                                    line.id,
+                                                                    'note',
+                                                                    ev
+                                                                )
+                                                            "
+                                                        />
+
+                                                    </td>
+
+                                                </tr>
+
+                                            </t>
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                            </t>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ====================================================== -->
+                    <!-- MANHOUR -->
+                    <!-- ====================================================== -->
+
+                    <div class="o_wr_subsection">
+
+                        <div class="o_wr_sub_point">
+                            b) Man-Hour Record
+                        </div>
+
+                        <div class="o_wr_manhour_section">
+
+                            <table class="o_wr_manhour_table">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>Last Week</th>
+                                        <th>This Week</th>
+                                        <th>Accumulative</th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    <tr>
+
+                                        <td>
+
+                                            <input
+                                                class="o_wr_input"
+                                                type="number"
+                                                step="0.01"
+                                                t-att-value="state.project.last_week || 0"
+                                                t-on-blur="(ev) => this.updateField('last_week', ev)"
+                                            />
+
+                                        </td>
+
+                                        <td>
+
+                                            <input
+                                                class="o_wr_input"
+                                                type="number"
+                                                step="0.01"
+                                                t-att-value="state.project.this_week || 0"
+                                                t-on-blur="(ev) => this.updateField('this_week', ev)"
+                                            />
+
+                                        </td>
+
+                                        <td>
+
+                                            <input
+                                                class="o_wr_input"
+                                                type="number"
+                                                step="0.01"
+                                                t-att-value="state.project.accumulative || 0"
+                                                t-on-blur="(ev) => this.updateField('accumulative', ev)"
+                                            />
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ====================================================== -->
+                    <!-- SAFETY ACTIVITY -->
+                    <!-- ====================================================== -->
+
+                    <div class="o_wr_subsection">
+
+                        <div class="o_wr_sub_point">
+                            c) Safety Activity
+                        </div>
+
+                        <div class="o_wr_safety_activity">
+
+                            <!-- EMPTY -->
+
+                            <t t-if="!state.safetyActivities.length">
+
+                                <div class="o_wr_empty">
+
+                                    No activity available
+
+                                </div>
+
+                            </t>
+
+                            <!-- ACTIVITIES -->
+
+                            <t t-foreach="state.safetyActivities || []"
+                               t-as="activity"
+                               t-key="activity.id">
+
+                                <div class="o_wr_activity_block">
+
+                                    <!-- TITLE -->
+
+                                    <div class="o_wr_activity_title">
+
+                                        <span class="activity_number">
+
+                                            <t t-esc="activity_index + 1"/>.
+
+                                        </span>
+
+                                        <input
+                                            class="o_wr_input o_wr_activity_input"
+                                            type="text"
+                                            t-att-value="activity.name || ''"
+                                            t-on-blur="
+                                                (ev) => this.updateSafetyActivity(
+                                                    activity.id,
+                                                    ev
+                                                )
+                                            "
+                                        />
+
+                                        <button
+                                            class="o_wr_btn"
+                                            t-att-data-activity-id="activity.id"
+                                            t-on-click="addSafetyBullet">
+
+                                            Add Bullet
+
+                                        </button>
+
+                                        <button
+                                            class="o_wr_btn danger"
+                                            t-att-data-activity-id="activity.id"
+                                            t-on-click="deleteSafetyActivity">
+
+                                            Delete
+
+                                        </button>
+
+                                    </div>
+
+                                    <!-- BULLETS -->
+
+                                    <ul class="o_wr_activity_bullets">
+
+                                        <t t-foreach="activity.lines || []"
+                                           t-as="line"
+                                           t-key="line.id">
+
+                                            <li>
+
+                                                <input
+                                                    class="o_wr_input o_wr_activity_input"
+                                                    type="text"
+                                                    t-att-value="line.name || ''"
+                                                    t-on-blur="
+                                                        (ev) => this.updateSafetyBullet(
+                                                            line.id,
+                                                            ev
+                                                        )
+                                                    "
+                                                />
+
+                                            </li>
+
+                                        </t>
+
+                                    </ul>
+
+                                </div>
+
+                            </t>
+
+                            <!-- ADD -->
+
+                            <div class="o_wr_action_bar">
+
+                                <button
+                                    class="o_wr_btn"
+                                    t-on-click="addSafetyActivity">
+
+                                    Add Activity
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ====================================================== -->
+                    <!-- ISSUE REGISTER -->
+                    <!-- ====================================================== -->
+
+                    <div class="o_wr_subsection">
+
+                        <div class="o_wr_section_sub">
+                            2. Issue Register
+                        </div>
+
+                        <div class="o_wr_issue_section">
+
+                            <table class="o_wr_issue_table">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>No</th>
+                                        <th>Register</th>
+                                        <th>Description</th>
+                                        <th>Submitted By</th>
+                                        <th>Submitted Date</th>
+                                        <th>Reviewed By</th>
+                                        <th>Reviewed Date</th>
+                                        <th>Status</th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    <t t-foreach="state.issues || []"
+                                    t-as="issue"
+                                    t-key="issue.id">
+
+                                        <tr>
+
+                                            <td class="text_center">
+                                                <t t-esc="issue_index + 1"/>
+                                            </td>
+
+                                            <td>
+                                                <t t-esc="issue.register_number || ''"/>
+                                            </td>
+
+                                            <td>
+                                                <t t-esc="issue.name || ''"/>
+                                            </td>
+
+                                            <td>
+                                                <t t-esc="issue.submitted_by?.[1] || ''"/>
+                                            </td>
+
+                                            <td>
+                                                <t t-esc="formatDate(issue.submitted_date)"/>
+                                            </td>
+
+                                            <td>
+                                                <t t-esc="issue.reviewed_by?.[1] || ''"/>
+                                            </td>
+
+                                            <td>
+                                                <t t-esc="formatDate(issue.reviewed_date)"/>
+                                            </td>
+
+                                            <td>
+
+                                                <t t-if="issue.status === 'open'">
+                                                    Submitted
+                                                </t>
+
+                                                <t t-if="issue.status === 'progress'">
+                                                    Under Review
+                                                </t>
+
+                                                <t t-if="issue.status === 'closed'">
+                                                    Solved
+                                                </t>
+
+                                            </td>
+
+                                        </tr>
+
+                                    </t>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ====================================================== -->
+                    <!-- GENERAL WORK -->
+                    <!-- ====================================================== -->
+
+                    <div class="o_wr_subsection">
+
+                        <div class="o_wr_section_sub">
+                            3. General Work
+                        </div>
+
+                        <div class="o_wr_general_work">
+
+                            <t t-foreach="state.generalWorks || []"
+                            t-as="work"
+                            t-key="work.id">
+
+                                <div class="o_wr_general_work_block">
+
+                                    <div class="o_wr_general_work_title">
+
+                                        <span class="general_work_number">
+                                            <t t-esc="work_index + 1"/>.
+                                        </span>
+
+                                        <input
+                                            class="o_wr_input o_wr_activity_input"
+                                            type="text"
+                                            t-att-value="work.name || ''"
+                                            t-on-blur="
+                                                (ev) => this.updateGeneralWork(
+                                                    work.id,
+                                                    ev
+                                                )
+                                            "
+                                        />
+
+                                        <button
+                                            class="o_wr_btn"
+                                            t-att-data-work-id="work.id"
+                                            t-on-click="addGeneralWorkBullet">
+
+                                            Add Bullet
+
+                                        </button>
+
+                                        <button
+                                            class="o_wr_btn danger"
+                                            t-att-data-work-id="work.id"
+                                            t-on-click="deleteGeneralWork">
+
+                                            Delete
+
+                                        </button>
+
+                                    </div>
+
+                                    <ul class="o_wr_general_work_bullets">
+
+                                        <t t-foreach="work.lines || []"
+                                        t-as="line"
+                                        t-key="line.id">
+
+                                            <li>
+
+                                                <input
+                                                    class="o_wr_input o_wr_activity_input"
+                                                    type="text"
+                                                    t-att-value="line.name || ''"
+                                                    t-on-blur="
+                                                        (ev) => this.updateGeneralWorkBullet(
+                                                            line.id,
+                                                            ev
+                                                        )
+                                                    "
+                                                />
+
+                                            </li>
+
+                                        </t>
+
+                                    </ul>
+
+                                </div>
+
+                            </t>
+
+                            <div class="o_wr_action_bar">
+
+                                <button
+                                    class="o_wr_btn"
+                                    t-on-click="addGeneralWork">
+
+                                    Add Work
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ====================================================== -->
+                    <!-- OVERVIEW -->
+                    <!-- ====================================================== -->
+
+                    <div class="o_wr_subsection">
+
+                        <div class="o_wr_section_main">
+                            II. Project Overview and Summary Update Status
+                        </div>
+
+                        <div class="o_wr_issue_section">
+
+                            <table class="o_wr_issue_table o_wr_overview_table">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>No.</th>
+                                        <th>Work Description</th>
+                                        <th>Weight</th>
+                                        <th>Plan</th>
+                                        <th>Actual</th>
+                                        <th>Note</th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    <t t-foreach="state.overview || []"
+                                    t-as="row"
+                                    t-key="row.no">
+
+                                        <tr t-att-class="row.is_total ? 'o_wr_total_row' : ''">
+
+                                            <td class="text_center">
+                                                <t t-esc="row.no"/>
+                                            </td>
+
+                                            <td>
+                                                <t t-esc="row.description"/>
+                                            </td>
+
+                                            <td class="text_center">
+                                                <t t-esc="row.weight"/>%
+                                            </td>
+
+                                            <td class="text_center">
+                                                <t t-esc="row.plan"/>%
+                                            </td>
+
+                                            <td class="text_center">
+                                                <t t-esc="row.actual"/>%
+                                            </td>
+
+                                            <td class="text_center">
+
+                                                <t t-if="!row.is_total">
+
+                                                    <span t-att-style="
+                                                        row.deviation &lt; 0
+                                                        ? 'color:red'
+                                                        : 'color:green'
+                                                    ">
+
+                                                        <t t-esc="row.note"/>
+
+                                                    </span>
+
+                                                </t>
+
+                                            </td>
+
+                                        </tr>
+
+                                    </t>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ====================================================== -->
+                    <!-- AREA OF CONCERN -->
+                    <!-- ====================================================== -->
+
+                    <div class="o_wr_subsection">
+
+                        <div class="o_wr_section_main">
+                            III. Area of Concern and Problem Identification
+                        </div>
+
+                        <div class="o_wr_area_concern">
+
+                            <div class="o_wr_section_sub">
+                                1. Activity Report Summary and Next Week's Schedule
+                            </div>
+
+                            <div class="o_wr_schedule_groups">
+
+                                <!-- LAST WEEK -->
+                                <div class="o_wr_schedule_block">
+
+                                    <div class="o_wr_schedule_title">
+                                        Last Week's Tasks:
+                                    </div>
+
+                                    <div class="o_wr_schedule_list">
+
+                                        <t t-foreach="this.getScheduleLines('last_week')"
+                                        t-as="line"
+                                        t-key="line.id">
+
+                                            <div class="o_wr_schedule_item">
+
+                                                <span class="o_wr_schedule_number">
+                                                    <t t-esc="line_index + 1"/>.
+                                                </span>
+
+                                                <input
+                                                    class="o_wr_input o_wr_activity_input"
+                                                    type="text"
+                                                    t-att-value="line.name || ''"
+                                                    t-on-blur="(ev) => this.updateScheduleTask(line.id, ev)"
+                                                />
+
+                                                <button
+                                                    class="o_wr_btn danger"
+                                                    t-on-click="() => this.deleteScheduleTask(line.id)">
+
+                                                    Delete
+
+                                                </button>
+
+                                            </div>
+
+                                        </t>
+
+                                    </div>
+
+                                    <button
+                                        class="o_wr_btn"
+                                        t-on-click="() => this.addScheduleTask('last_week')">
+
+                                        Add Task
+
+                                    </button>
+
+                                </div>
+
+                                <!-- THIS WEEK -->
+                                <div class="o_wr_schedule_block">
+
+                                    <div class="o_wr_schedule_title">
+                                        This Week's Tasks:
+                                    </div>
+
+                                    <div class="o_wr_schedule_list">
+
+                                        <t t-foreach="this.getScheduleLines('this_week')"
+                                        t-as="line"
+                                        t-key="line.id">
+
+                                            <div class="o_wr_schedule_item">
+
+                                                <span class="o_wr_schedule_number">
+                                                    <t t-esc="line_index + 1"/>.
+                                                </span>
+
+                                                <input
+                                                    class="o_wr_input o_wr_activity_input"
+                                                    type="text"
+                                                    t-att-value="line.name || ''"
+                                                    t-on-blur="(ev) => this.updateScheduleTask(line.id, ev)"
+                                                />
+
+                                                <button
+                                                    class="o_wr_btn danger"
+                                                    t-on-click="() => this.deleteScheduleTask(line.id)">
+
+                                                    Delete
+
+                                                </button>
+
+                                            </div>
+
+                                        </t>
+
+                                    </div>
+
+                                    <button
+                                        class="o_wr_btn"
+                                        t-on-click="() => this.addScheduleTask('this_week')">
+
+                                        Add Task
+
+                                    </button>
+
+                                </div>
+
+                                <!-- NEXT WEEK -->
+                                <div class="o_wr_schedule_block">
+
+                                    <div class="o_wr_schedule_title">
+                                        Planning for Next Week:
+                                    </div>
+
+                                    <div class="o_wr_schedule_list">
+
+                                        <t t-foreach="this.getScheduleLines('next_week')"
+                                        t-as="line"
+                                        t-key="line.id">
+
+                                            <div class="o_wr_schedule_item">
+
+                                                <span class="o_wr_schedule_number">
+                                                    <t t-esc="line_index + 1"/>.
+                                                </span>
+
+                                                <input
+                                                    class="o_wr_input o_wr_activity_input"
+                                                    type="text"
+                                                    t-att-value="line.name || ''"
+                                                    t-on-blur="(ev) => this.updateScheduleTask(line.id, ev)"
+                                                />
+
+                                                <button
+                                                    class="o_wr_btn danger"
+                                                    t-on-click="() => this.deleteScheduleTask(line.id)">
+
+                                                    Delete
+
+                                                </button>
+
+                                            </div>
+
+                                        </t>
+
+                                    </div>
+
+                                    <button
+                                        class="o_wr_btn"
+                                        t-on-click="() => this.addScheduleTask('next_week')">
+
+                                        Add Task
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ====================================================== -->
+                    <!-- ATTACHMENTS -->
+                    <!-- ====================================================== -->
+
+                    <div class="o_wr_subsection">
+
+                        <div class="o_wr_section_main">
+                            IV. Attachments
+                        </div>
+
+                        <div class="o_wr_area_concern">
+
+                            <div class="o_wr_section_sub">
+                                1. Material Status
+                            </div>
+
+                            <div class="o_wr_attachment_sub">
+                                a. (Terlampir)
+                            </div>
+
+                            <div class="o_wr_section_sub">
+                                2. Timeline
+                            </div>
+
+                            <div class="o_wr_attachment_sub">
+                                a. (Terlampir)
+                            </div>
+
+                            <div class="o_wr_section_sub">
+                                3. S-Curve
+                            </div>
+
+                            <div class="o_wr_attachment_sub">
+                                a. (Terlampir)
+                            </div>
+
+                            <div class="o_wr_section_sub">
+                                4. Field Activity Photos
+                            </div>
+
+                            <div class="o_wr_attachment_sub">
+                                a. (Terlampir)
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="o_wr_section_sub">
+                        Timeline
+                    </div>
+
+                    <div class="o_wr_timeline_section">
+
+                        <table class="o_wr_timeline_table">
+
+                            <thead>
+
+                                <tr>
+                                    <th rowspan="2">WBS</th>
+                                    <th rowspan="2">Task</th>
+                                    <th rowspan="2">Start</th>
+                                    <th rowspan="2">End</th>
+                                    <th rowspan="2">Dur</th>
+
+                                    <t t-foreach="state.timeline.months || []"
+                                    t-as="m"
+                                    t-key="m.name">
+
+                                        <th t-att-colspan="m.span">
+                                            <t t-esc="m.name"/>
+                                        </th>
+
+                                    </t>
+                                </tr>
+
+                                <tr>
+
+                                    <t t-foreach="state.timeline.dates || []"
+                                    t-as="d"
+                                    t-key="d">
+
+                                        <th>
+                                            <t t-esc="new Date(d).getDate()"/>
+                                        </th>
+
+                                    </t>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                <t t-foreach="state.timeline.tasks || []"
+                                t-as="task"
+                                t-key="task.wbs">
+
+                                    <tr t-att-class="task.is_parent ? 'o_wr_parent_task' : 'o_wr_child_task'">
+
+                                        <td>
+                                            <t t-esc="task.wbs"/>
+                                        </td>
+
+                                        <td t-att-style="'padding-left:' + (task.level * 18) + 'px; text-align:left;'">
+                                            <t t-esc="task.name"/>
+                                        </td>
+
+                                        <td>
+                                            <t t-esc="task.start"/>
+                                        </td>
+
+                                        <td>
+                                            <t t-esc="task.end"/>
+                                        </td>
+
+                                        <td>
+                                            <t t-esc="task.duration"/>
+                                        </td>
+
+                                        <t t-foreach="task.dates"
+                                        t-as="active"
+                                        t-key="active_index">
+
+                                            <td t-att-class="
+                                                active
+                                                ? (task.is_parent ? 'o_wr_bar_parent' : 'o_wr_bar_child')
+                                                : ''
+                                            "/>
+
+                                        </t>
+
+                                    </tr>
+
+                                </t>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="o_wr_section_sub">
+                        S-Curve
+                    </div>
+
+                    <div class="o_wr_attachment_sub">
+
+                        <button
+                            class="o_wr_btn"
+                            t-on-click="openScurve">
+
+                            Open Full S-Curve
+
+                        </button>
+
+                    </div>
+
+                    <div class="o_wr_section_sub">
+                        Documentation
+                    </div>
+
+                    <div class="o_wr_photo_section">
+
+                        <div class="o_wr_action_bar">
+
+                            <input
+                                type="file"
+                                multiple="multiple"
+                                accept="image/*"
+                                t-on-change="uploadPhotos"/>
+
+                        </div>
+
+                        <div class="o_wr_photo_grid">
+
+                            <t t-if="!state.photos?.length">
+
+                                <div class="o_wr_empty">
+                                    No photos uploaded
+                                </div>
+
+                            </t>
+
+                            <t t-foreach="state.photos || []"
+                            t-as="photo"
+                            t-key="photo.id">
+
+                                <div class="o_wr_photo_card">
+
+                                    <img
+                                        t-att-src="'data:image/png;base64,' + photo.image"/>
+
+                                    <input
+                                        class="o_wr_input"
+                                        type="text"
+                                        placeholder="Caption"
+                                        t-att-value="photo.name || ''"
+                                        t-on-blur="(ev) => this.updatePhotoCaption(photo.id, ev)"/>
+
+                                    <button
+                                        class="o_wr_btn danger"
+                                        t-on-click="() => this.deletePhoto(photo.id)">
+
+                                        Delete
+
+                                    </button>
+
+                                </div>
+
+                            </t>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="o_wr_btn"
+                        t-on-click="exportPDF">
+                        Export PDF
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <t t-if="state.showScurve">
+
+            <div
+                class="modal fade show d-block"
+                style="
+                    background: rgba(0,0,0,0.55);
+                    z-index: 2000;
+                ">
+
+                <div
+                    class="modal-dialog"
+                    style="
+                        width: 98vw;
+                        max-width: 98vw;
+                        margin: 10px auto;
+                    ">
+
+                    <div
+                        class="modal-content"
+                        style="
+                            height: 95vh;
+                            border-radius: 12px;
+                            overflow: hidden;
+                        ">
+
+                        <div class="modal-header">
+
+                            <h5 class="modal-title">
+                                S-Curve Viewer
+                            </h5>
+
+                            <button
+                                type="button"
+                                class="btn-close"
+                                t-on-click="closeScurve"/>
+
+                        </div>
+
+                        <div
+                            class="modal-body p-0"
+                            style="
+                                overflow: auto;
+                                background: #f8fafc;
+                            ">
+
+                            <ScurveChart
+                                action="{
+                                    params: {
+                                        project_id: state.selectedProjectId
+                                    }
+                                }"/>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </t>
+
+    </t>
+
+</templates>

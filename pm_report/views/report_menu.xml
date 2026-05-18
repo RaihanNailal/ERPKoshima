@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+
+        <!-- ===================================== -->
+        <!-- TREE VIEW -->
+        <!-- ===================================== -->
+
+        <record id="view_pm_project_tree_weekly_report"
+                model="ir.ui.view">
+
+            <field name="name">pm.project.tree.weekly.report</field>
+
+            <field name="model">pm.project</field>
+
+            <field name="arch"
+                   type="xml">
+
+                <list create="false"
+                      edit="false"
+                      delete="false">
+
+                    <!-- PROJECT -->
+
+                    <field name="name"
+                           string="Project"/>
+
+                    <!-- LEADER -->
+
+                    <field name="leader_id"
+                           string="Project Leader"
+                           widget="many2one_avatar_user"/>
+
+                    <!-- ACTION -->
+
+                    <button
+                        name="action_open_weekly_report"
+                        type="object"
+                        string="📄 Weekly Report"
+                        class="btn btn-sm btn-primary"/>
+
+                </list>
+
+            </field>
+
+        </record>
+
+
+        <!-- ===================================== -->
+        <!-- ACTION -->
+        <!-- ===================================== -->
+
+        <record id="action_pm_weekly_report_selector"
+                model="ir.actions.act_window">
+
+            <field name="name">Weekly Report</field>
+
+            <field name="res_model">pm.project</field>
+
+            <field name="view_mode">list</field>
+
+            <field name="view_id"
+                   ref="view_pm_project_tree_weekly_report"/>
+
+        </record>
+
+
+        <!-- ===================================== -->
+        <!-- MENU -->
+        <!-- ===================================== -->
+
+        <menuitem
+            id="menu_pm_weekly_report"
+            name="Weekly Report"
+            parent="pm_project.menu_pm_root"
+            action="action_pm_weekly_report_selector"
+            sequence="15"
+            groups="base.group_system,pm_core.group_pm_director,pm_core.group_pm_leader"/>
+
+    </data>
+</odoo>

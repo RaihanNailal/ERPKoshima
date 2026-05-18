@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ================= DIRECTOR ================= -->
+
+        <record id="rule_weekly_table_director_all" model="ir.rule">
+            <field name="name">Director Weekly Table All</field>
+            <field name="model_id" ref="model_pm_weekly_table"/>
+            <field name="groups" eval="[(4, ref('pm_core.group_pm_director'))]"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+        </record>
+
+        <record id="rule_safety_activity_director_all" model="ir.rule">
+            <field name="name">Director Safety Activity All</field>
+            <field name="model_id" ref="model_pm_safety_activity"/>
+            <field name="groups" eval="[(4, ref('pm_core.group_pm_director'))]"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+        </record>
+
+        <record id="rule_general_work_director_all" model="ir.rule">
+            <field name="name">Director General Work All</field>
+            <field name="model_id" ref="model_pm_general_work"/>
+            <field name="groups" eval="[(4, ref('pm_core.group_pm_director'))]"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+        </record>
+
+        <record id="rule_activity_schedule_director_all" model="ir.rule">
+            <field name="name">Director Activity Schedule All</field>
+            <field name="model_id" ref="model_pm_activity_schedule"/>
+            <field name="groups" eval="[(4, ref('pm_core.group_pm_director'))]"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+        </record>
+
+        <record id="rule_weekly_photo_director_all" model="ir.rule">
+            <field name="name">Director Weekly Photo All</field>
+            <field name="model_id" ref="model_pm_weekly_report_photo"/>
+            <field name="groups" eval="[(4, ref('pm_core.group_pm_director'))]"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+        </record>
+
+        <!-- ================= LEADER ================= -->
+
+        <record id="rule_weekly_table_leader_own" model="ir.rule">
+            <field name="name">Leader Weekly Table Own</field>
+            <field name="model_id" ref="model_pm_weekly_table"/>
+            <field name="groups" eval="[(4, ref('pm_core.group_pm_leader'))]"/>
+            <field name="domain_force">
+                [('project_id.leader_id','=',user.id)]
+            </field>
+        </record>
+
+        <record id="rule_safety_activity_leader_own" model="ir.rule">
+            <field name="name">Leader Safety Activity Own</field>
+            <field name="model_id" ref="model_pm_safety_activity"/>
+            <field name="groups" eval="[(4, ref('pm_core.group_pm_leader'))]"/>
+            <field name="domain_force">
+                [('project_id.leader_id','=',user.id)]
+            </field>
+        </record>
+
+        <record id="rule_general_work_leader_own" model="ir.rule">
+            <field name="name">Leader General Work Own</field>
+            <field name="model_id" ref="model_pm_general_work"/>
+            <field name="groups" eval="[(4, ref('pm_core.group_pm_leader'))]"/>
+            <field name="domain_force">
+                [('project_id.leader_id','=',user.id)]
+            </field>
+        </record>
+
+        <record id="rule_activity_schedule_leader_own" model="ir.rule">
+            <field name="name">Leader Activity Schedule Own</field>
+            <field name="model_id" ref="model_pm_activity_schedule"/>
+            <field name="groups" eval="[(4, ref('pm_core.group_pm_leader'))]"/>
+            <field name="domain_force">
+                [('project_id.leader_id','=',user.id)]
+            </field>
+        </record>
+
+        <record id="rule_weekly_photo_leader_own" model="ir.rule">
+            <field name="name">Leader Weekly Photo Own</field>
+            <field name="model_id" ref="model_pm_weekly_report_photo"/>
+            <field name="groups" eval="[(4, ref('pm_core.group_pm_leader'))]"/>
+            <field name="domain_force">
+                [('project_id.leader_id','=',user.id)]
+            </field>
+        </record>
+
+    </data>
+</odoo>

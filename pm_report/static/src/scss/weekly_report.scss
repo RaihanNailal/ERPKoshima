@@ -1,0 +1,1015 @@
+/* ====================================================== */
+/* ROOT */
+/* ====================================================== */
+
+.o_weekly_report {
+
+    min-height: 100vh;
+
+    padding: 0;
+
+    background: #f1f5f9;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    color: #0f172a;
+}
+
+.o_weekly_report * {
+
+    box-sizing: border-box;
+}
+
+
+/* ====================================================== */
+/* PAPER */
+/* ====================================================== */
+
+.o_weekly_report_paper {
+
+    width: 100%;
+
+    min-height: 100vh;
+
+    padding: 50px 60px;
+
+    background: #ffffff;
+}
+
+
+/* ====================================================== */
+/* COMMON */
+/* ====================================================== */
+
+.o_wr_center,
+.o_wr_logos,
+.o_wr_info {
+
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+}
+
+.o_wr_input {
+
+    width: 100%;
+
+    min-height: 34px;
+
+    padding: 6px 8px;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    color: #0f172a;
+}
+
+.o_wr_input:focus {
+
+    background: #eff6ff;
+}
+
+.o_wr_btn {
+
+    padding: 4px 10px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 6px;
+
+    background: #dbeafe;
+
+    color: #0f172a;
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.o_wr_btn:hover {
+
+    background: #bfdbfe;
+}
+
+.o_wr_btn.danger {
+
+    background: #dc2626;
+
+    border-color: #dc2626;
+
+    color: white;
+}
+
+.o_wr_btn.danger:hover {
+
+    background: #b91c1c;
+}
+
+.o_wr_empty {
+
+    padding: 18px;
+
+    border: 1px dashed #cbd5e1;
+
+    border-radius: 8px;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    color: #64748b;
+
+    background: #f8fafc;
+}
+
+
+/* ====================================================== */
+/* TOP */
+/* ====================================================== */
+
+.o_wr_top {
+
+    position: relative;
+
+    width: 100%;
+
+    min-height: 120px;
+}
+
+.o_wr_top_left {
+
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+}
+
+.o_wr_top_right {
+
+    position: absolute;
+
+    top: 0;
+
+    right: 0;
+}
+
+
+/* ====================================================== */
+/* TOP LEFT */
+/* ====================================================== */
+
+.o_wr_small_title {
+
+    font-size: 24px;
+
+    font-weight: 800;
+
+    line-height: 1.3;
+}
+
+.o_wr_vendor {
+
+    margin-top: 6px;
+
+    font-size: 18px;
+
+    font-weight: 700;
+}
+
+
+/* ====================================================== */
+/* TOP RIGHT */
+/* ====================================================== */
+
+.o_wr_top_right table {
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    line-height: 1.8;
+}
+
+.o_wr_top_right td {
+
+    padding: 6px 0;
+}
+
+/* ====================================================== */
+/* CENTER */
+/* ====================================================== */
+
+.o_wr_center {
+
+    margin-top: 20px;
+
+    text-align: center;
+}
+
+.o_wr_title {
+
+    font-size: 42px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.o_wr_week {
+
+    margin-top: 12px;
+
+    font-size: 24px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+
+/* ====================================================== */
+/* LOGOS */
+/* ====================================================== */
+
+/* ====================================================== */
+/* LOGOS */
+/* ====================================================== */
+
+.o_wr_logo {
+
+    max-width: 420px;
+
+    width: 100%;
+
+    max-height: 120px;
+
+    object-fit: contain;
+}
+
+
+/* PRIMARY */
+
+.o_wr_logo_primary {
+
+    max-width: 620px;
+
+    width: 100%;
+
+    max-height: 160px;
+
+    object-fit: contain;
+}
+
+
+/* SECONDARY */
+
+.o_wr_logo_secondary {
+
+    max-width: 720px;
+
+    width: 100%;
+
+    max-height: 220px;
+
+    object-fit: contain;
+}
+
+/* ====================================================== */
+/* INFO */
+/* ====================================================== */
+
+.o_wr_info {
+
+    margin-top: 30px;
+}
+
+.o_wr_info_table {
+
+    width: 620px;
+
+    border-collapse: collapse;
+}
+
+.o_wr_info_table td {
+
+    padding: 12px 0;
+
+    vertical-align: top;
+
+    font-size: 15px;
+}
+
+.info_label {
+
+    width: 180px;
+
+    font-weight: 700;
+}
+
+.info_separator {
+
+    width: 30px;
+
+    text-align: center;
+
+    font-weight: 700;
+}
+
+.info_value {
+
+    width: 410px;
+}
+
+
+/* ====================================================== */
+/* APPROVAL */
+/* ====================================================== */
+
+.o_wr_approval {
+
+    margin-top: 40px;
+}
+
+.o_wr_approval_table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+
+    text-align: center;
+}
+
+.o_wr_approval_table th,
+.o_wr_approval_table td {
+
+    border: 1px solid #444;
+
+    padding: 10px;
+
+    vertical-align: middle;
+}
+
+.o_wr_approval_table th {
+
+    background: #dbeafe;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+.sign_row td {
+
+    height: 90px;
+}
+
+
+/* ====================================================== */
+/* REPORT BODY */
+/* ====================================================== */
+
+.o_wr_report_body {
+
+    margin-top: 60px;
+}
+
+
+/* ====================================================== */
+/* SECTION */
+/* ====================================================== */
+
+.o_wr_section_block {
+
+    margin-top: 40px;
+
+    margin-bottom: 20px;
+}
+
+.o_wr_section_main {
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    margin-bottom: 12px;
+}
+
+.o_wr_section_sub {
+
+    margin-left: 90px;
+
+    margin-bottom: 10px;
+
+    font-size: 18px;
+
+    font-weight: 500;
+}
+
+
+/* ====================================================== */
+/* SUBSECTION */
+/* ====================================================== */
+
+.o_wr_subsection {
+
+    margin-bottom: 40px;
+}
+
+.o_wr_sub_point {
+
+    margin-left: 140px;
+
+    margin-bottom: 16px;
+
+    font-size: 18px;
+
+    font-weight: 500;
+}
+
+
+/* ====================================================== */
+/* ACTION BAR */
+/* ====================================================== */
+
+.o_wr_action_bar {
+
+    display: flex;
+
+    gap: 12px;
+
+    margin: 16px 0;
+}
+
+
+.o_wr_status_manpower_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+}
+
+.o_wr_status_manpower_table th,
+.o_wr_status_manpower_table td {
+    border: 1px solid #444;
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.o_wr_status_manpower_table th {
+    background: #dbeafe;
+    font-weight: 700;
+}
+
+/* ====================================================== */
+/* DYNAMIC TABLE */
+/* ====================================================== */
+
+.o_wr_dynamic_table_block {
+
+    margin-bottom: 36px;
+}
+
+.o_wr_dynamic_header {
+
+    display: flex;
+
+    gap: 12px;
+
+    margin-bottom: 14px;
+}
+
+.o_wr_dynamic_table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+}
+
+.o_wr_dynamic_table th,
+.o_wr_dynamic_table td {
+
+    border: 1px solid #444;
+
+    padding: 8px;
+
+    height: 54px;
+
+    vertical-align: middle;
+
+    text-align: center;
+
+    overflow-wrap: break-word;
+
+    word-break: break-word;
+}
+
+.o_wr_dynamic_table thead th {
+
+    background: #dbeafe;
+
+    font-size: 15px;
+
+    font-weight: 700;
+}
+
+.section_title {
+
+    background: #bfdbfe !important;
+}
+
+.section_title_input {
+
+    width: 100%;
+
+    height: 44px;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    text-align: center;
+
+    font-size: 18px;
+
+    font-weight: 700;
+}
+
+.checkbox_cell {
+
+    text-align: center;
+}
+
+.checkbox_cell input {
+
+    width: 18px;
+
+    height: 18px;
+
+    cursor: pointer;
+}
+
+
+/* ====================================================== */
+/* MANHOUR */
+/* ====================================================== */
+
+.o_wr_manhour_section {
+
+    margin-left: 140px;
+}
+
+.o_wr_manhour_table {
+
+    width: 360px;
+
+    border-collapse: collapse;
+}
+
+.o_wr_manhour_table th,
+.o_wr_manhour_table td {
+
+    border: 1px solid #444;
+
+    padding: 8px;
+
+    text-align: center;
+}
+
+.o_wr_manhour_table th {
+
+    background: #dbeafe;
+
+    font-weight: 700;
+}
+
+
+/* ====================================================== */
+/* SAFETY ACTIVITY */
+/* ====================================================== */
+
+.o_wr_safety_activity {
+
+    margin-left: 140px;
+}
+
+.o_wr_activity_block {
+
+    margin-bottom: 24px;
+}
+
+.o_wr_activity_title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 10px;
+
+    margin-left: 30px;
+}
+
+.activity_number {
+
+    font-size: 16px;
+
+    font-weight: 400;
+
+    min-width: 32px;
+}
+
+.o_wr_activity_bullets {
+
+    margin-left: 95px;
+}
+
+.o_wr_activity_bullets li {
+
+    margin-bottom: 10px;
+}
+
+
+/* ====================================================== */
+/* PRINT */
+/* ====================================================== */
+
+@media print {
+
+    .o_weekly_report {
+
+        background: white;
+    }
+
+    .o_weekly_report_paper {
+
+        padding: 0;
+    }
+
+    .o_wr_btn {
+
+        display: none !important;
+    }
+
+    .o_wr_input {
+
+        background: transparent !important;
+    }
+
+    .o_wr_dynamic_table th,
+    .o_wr_dynamic_table td,
+    .o_wr_approval_table th,
+    .o_wr_approval_table td,
+    .o_wr_manhour_table th,
+    .o_wr_manhour_table td {
+
+        border: 1px solid #000;
+    }
+}
+
+/* ====================================================== */
+/* ACTIVITY INPUT */
+/* ====================================================== */
+
+.o_wr_activity_input {
+
+    text-align: left;
+}
+
+/* ====================================================== */
+/* ISSUE REGISTER */
+/* ====================================================== */
+
+.o_wr_issue_section {
+
+    margin-left: 140px;
+
+    margin-top: 20px;
+}
+
+.o_wr_issue_table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+.o_wr_issue_table th,
+.o_wr_issue_table td {
+
+    border: 1px solid #444;
+
+    padding: 8px 10px;
+
+    font-size: 13px;
+
+    vertical-align: middle;
+}
+
+.o_wr_issue_table th {
+
+    background: #f4b183;
+
+    font-weight: 700;
+
+    text-align: center;
+}
+
+.o_wr_issue_table .text_center {
+
+    text-align: center;
+}
+
+/* ====================================================== */
+/* GENERAL WORK */
+/* ====================================================== */
+
+.o_wr_general_work {
+
+    margin-left: 140px;
+}
+
+.o_wr_general_work_block {
+
+    margin-bottom: 28px;
+}
+
+.o_wr_general_work_title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 10px;
+}
+
+.general_work_number {
+
+    min-width: 24px;
+
+    font-size: 16px;
+
+    font-weight: 400;
+}
+
+.o_wr_general_work_bullets {
+
+    margin-left: 40px;
+}
+
+.o_wr_general_work_bullets li {
+
+    margin-bottom: 10px;
+}
+
+/* ====================================================== */
+/* AREA OF CONCERN */
+/* ====================================================== */
+
+.o_wr_area_concern {
+    margin-left: 0;
+}
+
+.o_wr_schedule_block {
+    margin-bottom: 35px;
+}
+
+.o_wr_schedule_item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.o_wr_schedule_number {
+    min-width: 20px;
+    font-size: 16px;
+}
+
+.o_wr_schedule_groups {
+    margin-left: 90px;
+    margin-top: 20px;
+}
+
+.o_wr_schedule_block {
+    margin-bottom: 35px;
+}
+
+.o_wr_schedule_list {
+    margin-left: 55px;
+    margin-top: 10px;
+}
+
+.o_wr_schedule_item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.o_wr_schedule_number {
+    min-width: 20px;
+    font-size: 16px;
+}
+
+.o_wr_schedule_title {
+    margin-left: 55px;
+    margin-bottom: 12px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.o_wr_schedule_block > .o_wr_btn {
+    margin-left: 55px;
+    margin-top: 10px;
+}
+
+/* ====================================================== */
+/* CONTENT PAGE */
+/* ====================================================== */
+
+.o_wr_content_page {
+    margin-top: 70px;
+    margin-bottom: 80px;
+    padding: 0 40px;
+    page-break-after: always;
+}
+
+.o_wr_content_title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    text-decoration: underline;
+    margin-bottom: 50px;
+    letter-spacing: 1px;
+}
+
+.o_wr_content_body {
+    font-size: 18px;
+    line-height: 2;
+    color: #111827;
+}
+
+.o_wr_content_row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.o_wr_content_row .dots {
+    flex: 1;
+    border-bottom: 2px dotted #444;
+    transform: translateY(-3px);
+}
+
+.o_wr_content_sub {
+    margin-left: 38px;
+}
+
+.o_wr_content_sub_indent {
+    margin-left: 72px;
+}
+
+/* ====================================================== */
+/* ATTACHMENTS */
+/* ====================================================== */
+.o_wr_attachment_sub {
+    margin-left: 145px;
+    margin-top: 8px;
+    margin-bottom: 24px;
+    font-size: 16px;
+}
+
+/* ====================================================== */
+/* Timeline */
+/* ====================================================== */
+
+.o_wr_timeline_section {
+    margin-left: 90px;
+    margin-top: 20px;
+    width: calc(100% - 90px);
+    overflow-x: auto;
+}
+
+.o_wr_timeline_table {
+    border-collapse: collapse;
+    font-size: 11px;
+    min-width: 1200px;
+}
+
+.o_wr_timeline_table th,
+.o_wr_timeline_table td {
+    border: 1px solid #444;
+    padding: 4px;
+    text-align: center;
+}
+
+.o_wr_parent_task td {
+    font-weight: 700;
+}
+
+.o_wr_parent_task td:not(.o_wr_bar_parent) {
+    background: #f8fafc;
+}
+
+.o_wr_child_task td {
+    font-weight: 400;
+}
+
+.o_wr_bar_parent {
+    background: #15803d !important;
+}
+
+.o_wr_bar_child {
+    background: #22c55e !important;
+}
+
+/* =========================
+   SCURVE
+========================= */
+
+.o_wr_scurve_embed {
+    margin-left: 90px;
+    margin-top: 20px;
+    width: calc(100% - 90px);
+    overflow-x: auto;
+    background: white;
+}
+
+.o_wr_scurve_embed .container,
+.o_wr_scurve_embed .scurve-container {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+.o_wr_scurve_embed table {
+    min-width: 1400px;
+}
+
+.o_wr_scurve_embed canvas,
+.o_wr_scurve_embed svg {
+    max-width: 100%;
+}
+
+/* =========================
+   Foto
+========================= */
+
+.o_wr_photo_card {
+    width: 260px;
+    min-height: 320px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.o_wr_photo_card img {
+    width: 100%;
+    height: 220px;
+
+    object-fit: contain;
+    object-position: center;
+
+    background: #f8fafc;
+    border-radius: 6px;
+    display: block;
+}
+
+.o_wr_photo_section {
+    margin-left: 90px;
+    margin-top: 20px;
+}
+
+.o_wr_photo_grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 20px;
+}

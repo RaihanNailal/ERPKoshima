@@ -1,0 +1,1283 @@
+<odoo>
+
+    <template id="weekly_report_header_block">
+        <table style="width:100%; border-collapse:collapse; table-layout:fixed; font-family:'Times New Roman', serif; color:#000;">
+            <tr>
+                <td style="width:36%; vertical-align:top;">
+                    <div style="font-size:26px; font-weight:normal; text-decoration:underline; line-height:1.05;">
+                        WEEKLY REPORT
+                    </div>
+                    <div style="font-size:17px; font-weight:normal; line-height:1.05; margin-top:4px;">
+                        <span t-esc="project.vendor or ''"/>
+                    </div>
+                </td>
+
+                <td style="width:36%;"></td>
+
+                <td style="width:40%; vertical-align:top;">
+                    <table style="width:100%; border-collapse:collapse; font-family:'Times New Roman', serif; color:#000; font-size:14px; font-weight:normal; line-height:1.05;">
+                        <tr>
+                            <td colspan="2" style="font-size:18px; font-weight:normal; text-decoration:underline; padding:0 2px 3px 2px; vertical-align:top; line-height:1.05;">
+                                <span t-esc="project.name or ''"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:82px; padding:1px 2px; vertical-align:top;">PO No.</td>
+                            <td style="padding:1px 2px; vertical-align:top;">: <span t-esc="project.po_number or ''"/></td>
+                        </tr>
+                        <tr>
+                            <td style="width:82px; padding:1px 2px; vertical-align:top;">PO Date</td>
+                            <td style="padding:1px 2px; vertical-align:top;">: <span t-esc="project.start_date or ''"/></td>
+                        </tr>
+                        <tr>
+                            <td style="width:82px; padding:1px 2px; vertical-align:top;">Rev</td>
+                            <td style="padding:1px 2px; vertical-align:top;">: 0</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </template>
+
+    <template id="weekly_report_layout">
+        <div class="header" style="height: 92px; padding: 0; margin: -8px 0 0 0;">
+            <t t-call="pm_report.weekly_report_header_block"/>
+        </div>
+
+        <div class="article">
+            <t t-out="0"/>
+        </div>
+    </template>
+
+    <template id="weekly_report_pdf_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+
+                <t t-set="data" t-value="report_data"/>
+                <t t-set="current_week" t-value="data['current_week']"/>
+                <t t-set="period_start" t-value="data['period_start']"/>
+                <t t-set="period_end" t-value="data['period_end']"/>
+                <t t-set="today" t-value="data['today']"/>
+                <t t-set="project" t-value="data['project']"/>
+                <t t-set="tables" t-value="project.weekly_table_ids"/>
+                <t t-set="safety" t-value="project.safety_activity_ids"/>
+                <t t-set="issues" t-value="data['issues']"/>
+                <t t-set="general" t-value="data['general']"/>
+                <t t-set="overview" t-value="data['overview']"/>
+                <t t-set="schedules" t-value="data['schedules']"/>
+                <t t-set="bulan_id" t-value="{
+                    1:'Januari',
+                    2:'Februari',
+                    3:'Maret',
+                    4:'April',
+                    5:'Mei',
+                    6:'Juni',
+                    7:'Juli',
+                    8:'Agustus',
+                    9:'September',
+                    10:'Oktober',
+                    11:'November',
+                    12:'Desember'
+                }"/>
+                <t t-call="pm_report.weekly_report_layout">
+
+                    <style>
+                        @page {
+                            size: A4;
+                            margin: 0;
+                        }
+
+                        body {
+                            font-family: "Times New Roman", serif;
+                            color: #000;
+                            font-size: 16px;
+                            font-weight: normal;
+                        }
+
+                        .page {
+                            page-break-after: always;
+                        }
+
+                        .page:last-child {
+                            page-break-after: auto;
+                        }
+
+                        .pdf_page {
+                            padding: 0 50px 35px 50px;
+                        }
+
+                        .pdf_content_page {
+                            padding: 0 70px 35px 70px;
+                            font-size: 16px;
+                            font-weight: normal;
+                        }
+
+                        .pdf_center {
+                            text-align: center;
+                            margin-top: 0;
+                        }
+
+                        .pdf_title {
+                            font-size: 48px;
+                            font-weight: bold;
+                        }
+
+                        .pdf_week {
+                            font-size: 30px;
+                            font-weight: bold;
+                            margin-top: 10px;
+                        }
+
+                        .pdf_logo_client {
+                            width: 380px;
+                            margin: 2px auto;
+                            display: block;
+                        }
+
+                        .pdf_logo_vendor {
+                            width: 420px;
+                            margin: 20px auto;
+                            display: block;
+                        }
+
+                        .pdf_info {
+                            width: 68%;
+                            margin: 45px 0 35px 220px;
+                        }
+
+                        .pdf_info table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-size: 18px;
+                            font-weight: normal;
+                        }
+
+                        .pdf_info td {
+                            padding: 10px 3px;
+                            vertical-align: top;
+                            font-weight: normal;
+                        }
+
+                        .pdf_info_label {
+                            width: 125px;
+                            font-weight: normal;
+                        }
+
+                        .pdf_info_sep {
+                            width: 12px;
+                            text-align: center;
+                            font-weight: normal;
+                        }
+
+                        .pdf_approval {
+                            width: 100%;
+                            margin-top: 25px;
+                        }
+
+                        .pdf_approval table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-size: 14px;
+                            font-weight: normal;
+                        }
+
+                        .pdf_approval th,
+                        .pdf_approval td {
+                            border: 1px solid #000;
+                            padding: 8px;
+                            text-align: center;
+                            vertical-align: middle;
+                            font-weight: normal;
+                        }
+
+                        .pdf_sign_row td {
+                            height: 150px;
+                        }
+
+                        .pdf_content_title {
+                            text-align: center;
+                            font-size: 16px;
+                            font-weight: normal;
+                            text-decoration: underline;
+                            margin-bottom: 35px;
+                        }
+
+                        .toc_table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-size: 16px;
+                            font-weight: normal;
+                        }
+
+                        .toc_table td {
+                            vertical-align: top;
+                            padding: 0;
+                            font-weight: normal;
+                        }
+
+                        .toc_main td {
+                            padding: 10px 0;
+                        }
+
+                        .toc_num {
+                            width: 45px;
+                            padding-right: 8px;
+                        }
+
+                        .toc_line {
+                            width: 100%;
+                        }
+
+                        .toc_line_inner {
+                            display: table;
+                            width: 100%;
+                            table-layout: auto;
+                        }
+
+                        .toc_text {
+                            display: table-cell;
+                            white-space: nowrap;
+                            padding-right: 8px;
+                            vertical-align: middle;
+                        }
+
+                        .toc_dots {
+                            display: table-cell;
+                            width: 100%;
+                            border-bottom: 1px dotted #444;
+                            vertical-align: middle;
+                        }
+
+                        .toc_page {
+                            display: table-cell;
+                            width: 30px;
+                            text-align: right;
+                            padding-left: 8px;
+                            vertical-align: middle;
+                        }
+
+                        .toc_sub td {
+                            padding: 6px 0;
+                        }
+
+                        .toc_indent_1 {
+                            padding-left: 45px;
+                        }
+
+                        .toc_indent_2 {
+                            padding-left: 75px;
+                        }
+
+                        .report_outline {
+                            font-size: 16px;
+                            font-weight: normal;
+                        }
+
+                        .report_line {
+                            display: table;
+                            width: 100%;
+                            margin-bottom: 12px;
+                            font-size: 16px;
+                            font-weight: normal;
+                        }
+
+                        .report_no {
+                            display: table-cell;
+                            width: 32px;
+                            white-space: nowrap;
+                            vertical-align: top;
+                        }
+
+                        .report_text {
+                            display: table-cell;
+                            vertical-align: top;
+                        }
+
+                        .report_level_1 {
+                            margin-left: 0;
+                            margin-bottom: 20px;
+                        }
+
+                        .report_level_2 {
+                            margin-left: 32px;
+                            margin-bottom: 15px;
+                        }
+
+                        .report_level_3 {
+                            margin-left: 64px;
+                            margin-bottom: 10px;
+                        }
+
+                        .report_bullet {
+                            margin-left: 96px;
+                            margin-bottom: 5px;
+                        }
+
+                        .safety_activity_row {
+                            display: table;
+                            width: 100%;
+                            margin-left: 100px;
+                            margin-bottom: 18px;
+                            font-size: 16px;
+                            font-weight: normal;
+                        }
+
+                        .safety_activity_no {
+                            display: table-cell;
+                            width: 38px;
+                            vertical-align: top;
+                            white-space: nowrap;
+                        }
+
+                        .safety_activity_text {
+                            display: table-cell;
+                            vertical-align: top;
+                        }
+
+                        .safety_bullet_row {
+                            display: table;
+                            width: 100%;
+                            margin-left: 140px;
+                            margin-bottom: 8px;
+                            font-size: 16px;
+                            font-weight: normal;
+                        }
+
+                        .safety_bullet_mark {
+                            display: table-cell;
+                            width: 18px;
+                            vertical-align: top;
+                            white-space: nowrap;
+                        }
+
+                        .safety_bullet_text {
+                            display: table-cell;
+                            vertical-align: top;
+                        }
+
+                        .pdf_manpower_table,
+                        .pdf_dynamic_table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-bottom: 20px;
+                            font-size: 12px;
+                            font-weight: normal;
+                        }
+
+                        .pdf_manhour_table {
+                            width: 70%;
+                            border-collapse: collapse;
+                            margin: 0 auto 20px auto;
+                            font-size: 12px;
+                            font-weight: normal;
+                        }
+
+                        .pdf_manpower_table th,
+                        .pdf_manpower_table td,
+                        .pdf_dynamic_table th,
+                        .pdf_dynamic_table td,
+                        .pdf_manhour_table th,
+                        .pdf_manhour_table td {
+                            border: 1px solid #000;
+                            padding: 6px;
+                            text-align: center;
+                            vertical-align: middle;
+                            font-weight: normal;
+                        }
+
+                        .pdf_dynamic_table th,
+                        .pdf_manpower_table th,
+                        .pdf_manhour_table th {
+                            background: #dce6f2;
+                        }
+
+                        .pdf_dynamic_table thead,
+                        .pdf_manpower_table thead,
+                        .pdf_manhour_table thead,
+                        .pdf_approval thead {
+                            display: table-header-group;
+                        }
+
+                        .pdf_manpower_table tr,
+                        .pdf_dynamic_table tr,
+                        .pdf_manhour_table tr,
+                        .pdf_approval tr {
+                            page-break-inside: avoid;
+                        }
+
+                        .pdf_safety_block {
+                            margin-top: 10px;
+                            font-size: 16px;
+                            font-weight: normal;
+                        }
+
+                        .pdf_check_cell {
+                            text-align: center;
+                            vertical-align: middle;
+                        }
+
+                        .pdf_check_icon {
+                            width: 12px;
+                            height: 12px;
+                        }
+
+                        .pdf_issue_table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin: 10px 0 20px 0;
+                            font-size: 11px;
+                            font-weight: normal;
+                        }
+
+                        .pdf_issue_table th,
+                        .pdf_issue_table td {
+                            border: 1px solid #000;
+                            padding: 5px;
+                            vertical-align: middle;
+                            font-weight: normal;
+                        }
+
+                        .pdf_issue_table th {
+                            background: #f4b183;
+                            text-align: center;
+                        }
+
+                        .pdf_issue_table td {
+                            text-align: left;
+                        }
+
+                        .pdf_issue_table .text_center {
+                            text-align: center;
+                        }
+
+                        .pdf_general_block {
+                            margin-top: 10px;
+                            font-size: 16px;
+                            font-weight: normal;
+                        }
+
+                        .general_work_row {
+                            display: table;
+                            width: 100%;
+                            margin-left: 100px;
+                            margin-bottom: 18px;
+                            font-size: 16px;
+                            font-weight: normal;
+                        }
+
+                        .general_work_no {
+                            display: table-cell;
+                            width: 38px;
+                            vertical-align: top;
+                            white-space: nowrap;
+                        }
+
+                        .general_work_text {
+                            display: table-cell;
+                            vertical-align: top;
+                        }
+
+                        .general_bullet_row {
+                            display: table;
+                            width: 100%;
+                            margin-left: 140px;
+                            margin-bottom: 8px;
+                            font-size: 16px;
+                            font-weight: normal;
+                        }
+
+                        .general_bullet_mark {
+                            display: table-cell;
+                            width: 18px;
+                            vertical-align: top;
+                            white-space: nowrap;
+                        }
+
+                        .general_bullet_text {
+                            display: table-cell;
+                            vertical-align: top;
+                        }
+
+                        .report_level_4 {
+                            margin-left: 96px;
+                            margin-bottom: 10px;
+                        }
+
+                        .report_level_5 {
+                            margin-left: 128px;
+                            margin-bottom: 5px;
+                        }
+
+                        .pdf_overview_table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin: 20px 0 20px 0;
+                            font-size: 12px;
+                            font-weight: normal;
+                        }
+
+                        .pdf_overview_table th,
+                        .pdf_overview_table td {
+                            border: 1px solid #000;
+                            padding: 6px;
+                            vertical-align: middle;
+                            font-weight: normal;
+                        }
+
+                        .pdf_overview_table th {
+                            background: #f4b183;
+                            text-align: center;
+                        }
+
+                        .pdf_overview_table td {
+                            text-align: center;
+                        }
+
+                        .pdf_overview_table .overview_desc {
+                            text-align: left;
+                        }
+
+                        .pdf_overview_table .overview_done {
+                            color: green;
+                        }
+
+                        .pdf_overview_table .overview_progress {
+                            color: red;
+                        }
+
+                        .pdf_overview_table .overview_total td {
+                            font-weight: normal;
+                        }
+
+                        .pdf_schedule_block {
+                            margin-top: 20px;
+                            font-size: 16px;
+                            font-weight: normal;
+                        }
+
+                        .pdf_schedule_title {
+                            margin-left: 96px;
+                            margin-bottom: 14px;
+                            font-size: 16px;
+                            font-weight: normal;
+                        }
+
+                        .pdf_schedule_item {
+                            display: table;
+                            width: 100%;
+                            margin-left: 128px;
+                            margin-bottom: 10px;
+                            font-size: 16px;
+                            font-weight: normal;
+                        }
+
+                        .pdf_schedule_no {
+                            display: table-cell;
+                            width: 38px;
+                            vertical-align: top;
+                            white-space: nowrap;
+                        }
+
+                        .pdf_schedule_text {
+                            display: table-cell;
+                            vertical-align: top;
+                        }
+                    </style>
+
+                    <main>
+                        
+                        <div class="page">
+                            <div class="pdf_page">
+
+                                <div class="pdf_center">
+                                    <div class="pdf_title">WEEKLY REPORT</div>
+
+                                    <div class="pdf_week">
+                                        WEEK
+                                        <t t-if="current_week &lt; 10">
+                                            0<t t-esc="current_week"/>
+                                        </t>
+                                        <t t-else="">
+                                            <t t-esc="current_week"/>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <t t-if="project.logo_left">
+                                    <img
+                                        class="pdf_logo_client"
+                                        t-att-src="'data:image/png;base64,' + project.logo_left.decode('utf-8')"
+                                    />
+                                </t>
+
+                                <t t-if="project.logo_right">
+                                    <img
+                                        class="pdf_logo_vendor"
+                                        t-att-src="'data:image/png;base64,' + project.logo_right.decode('utf-8')"
+                                    />
+                                </t>
+
+                                <div class="pdf_info">
+                                    <table>
+                                        <tr>
+                                            <td class="pdf_info_label">Client</td>
+                                            <td class="pdf_info_sep">:</td>
+                                            <td><span t-esc="project.client_id.display_name or ''"/></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="pdf_info_label">Project</td>
+                                            <td class="pdf_info_sep">:</td>
+                                            <td><span t-esc="project.name or ''"/></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="pdf_info_label">PO Number</td>
+                                            <td class="pdf_info_sep">:</td>
+                                            <td><span t-esc="project.po_number or ''"/></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="pdf_info_label">Duration</td>
+                                            <td class="pdf_info_sep">:</td>
+                                            <td>
+                                                <t t-if="project.start_date and project.end_date">
+                                                    <span t-esc="project.start_date.day"/>
+                                                    <span t-esc="bulan_id[project.start_date.month]"/>
+                                                    <span t-esc="project.start_date.year"/>
+                                                    s/d
+                                                    <span t-esc="project.end_date.day"/>
+                                                    <span t-esc="bulan_id[project.end_date.month]"/>
+                                                    <span t-esc="project.end_date.year"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="pdf_info_label">Location</td>
+                                            <td class="pdf_info_sep">:</td>
+                                            <td><span t-esc="project.project_location or ''"/></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="pdf_info_label">Period</td>
+                                            <td class="pdf_info_sep">:</td>
+                                            <td>
+                                                <t t-if="period_start and period_end">
+                                                    <span t-esc="period_start.day"/>
+                                                    <span t-esc="bulan_id[period_start.month]"/>
+                                                    <span t-esc="period_start.year"/>
+                                                    s/d
+                                                    <span t-esc="period_end.day"/>
+                                                    <span t-esc="bulan_id[period_end.month]"/>
+                                                    <span t-esc="period_end.year"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="pdf_info_label">Report Date</td>
+                                            <td class="pdf_info_sep">:</td>
+                                            <td>
+                                                <span t-esc="today.day"/>
+                                                <span t-esc="bulan_id[today.month]"/>
+                                                <span t-esc="today.year"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <div class="pdf_approval">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Description</th>
+                                                <th>Prepared</th>
+                                                <th>Checked &amp; Acknowledged</th>
+                                                <th>Checked</th>
+                                                <th>Approved</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr>
+                                                <td>Company</td>
+                                                <td><span t-esc="project.prepared_company or ''"/></td>
+                                                <td><span t-esc="project.acknowledged_company or ''"/></td>
+                                                <td><span t-esc="project.checked_company or ''"/></td>
+                                                <td><span t-esc="project.approved_company or ''"/></td>
+                                            </tr>
+
+                                            <tr class="pdf_sign_row">
+                                                <td>Sign</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>Name</td>
+                                                <td><span t-esc="project.prepared_by or ''"/></td>
+                                                <td><span t-esc="project.acknowledged_by or ''"/></td>
+                                                <td><span t-esc="project.checked_by or ''"/></td>
+                                                <td><span t-esc="project.approved_by or ''"/></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- PAGE 2 -->
+                        <div class="page">
+                            <div class="pdf_content_page">
+
+                                <div class="pdf_content_title">
+                                    CONTENT
+                                </div>
+
+                                <table class="toc_table">
+                                    <tr class="toc_main">
+                                        <td class="toc_num">I.</td>
+                                        <td class="toc_line">
+                                            <div class="toc_line_inner">
+                                                <span class="toc_text">Highlight activities this period</span>
+                                                <span class="toc_dots"></span>
+                                                <span class="toc_page">3</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="toc_sub">
+                                        <td></td>
+                                        <td class="toc_indent_1">1. Safety Record</td>
+                                    </tr>
+
+                                    <tr class="toc_sub">
+                                        <td></td>
+                                        <td class="toc_indent_2">a) Manpower</td>
+                                    </tr>
+
+                                    <tr class="toc_sub">
+                                        <td></td>
+                                        <td class="toc_indent_2">b) Man-Hour Record</td>
+                                    </tr>
+
+                                    <tr class="toc_sub">
+                                        <td></td>
+                                        <td class="toc_indent_1">2. Issue Register</td>
+                                    </tr>
+
+                                    <tr class="toc_sub">
+                                        <td></td>
+                                        <td class="toc_indent_1">3. General Work</td>
+                                    </tr>
+
+                                    <tr class="toc_main">
+                                        <td class="toc_num">II.</td>
+                                        <td class="toc_line">
+                                            <div class="toc_line_inner">
+                                                <span class="toc_text">Project Overview and Summary Update Status</span>
+                                                <span class="toc_dots"></span>
+                                                <span class="toc_page">8</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="toc_sub">
+                                        <td></td>
+                                        <td class="toc_indent_1">1. Summary</td>
+                                    </tr>
+
+                                    <tr class="toc_main">
+                                        <td class="toc_num">III.</td>
+                                        <td class="toc_line">
+                                            <div class="toc_line_inner">
+                                                <span class="toc_text">Area of Concern and Problem Identification</span>
+                                                <span class="toc_dots"></span>
+                                                <span class="toc_page">10</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="toc_sub">
+                                        <td></td>
+                                        <td class="toc_indent_1">
+                                            1. Work Summary during Report Activity and Schedule for the Following Week
+                                        </td>
+                                    </tr>
+
+                                    <tr class="toc_main">
+                                        <td class="toc_num">IV.</td>
+                                        <td class="toc_line">
+                                            <div class="toc_line_inner">
+                                                <span class="toc_text">Attachments</span>
+                                                <span class="toc_dots"></span>
+                                                <span class="toc_page">12</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="toc_sub">
+                                        <td></td>
+                                        <td class="toc_indent_1">1. Material Status</td>
+                                    </tr>
+
+                                    <tr class="toc_sub">
+                                        <td></td>
+                                        <td class="toc_indent_1">2. Timeline</td>
+                                    </tr>
+
+                                    <tr class="toc_sub">
+                                        <td></td>
+                                        <td class="toc_indent_1">3. S-Curve</td>
+                                    </tr>
+
+                                    <tr class="toc_sub">
+                                        <td></td>
+                                        <td class="toc_indent_1">4. Documentation</td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+
+                        <!-- PAGE 3 -->
+                        <div class="page">
+                            <div class="pdf_content_page">
+
+                                <div class="report_outline">
+
+                                    <div class="report_line report_level_1">
+                                        <span class="report_no">I.</span>
+                                        <span class="report_text">Highlight activities this period</span>
+                                    </div>
+
+                                    <div class="report_line report_level_2">
+                                        <span class="report_no">1.</span>
+                                        <span class="report_text">Safety Record</span>
+                                    </div>
+
+                                    <div class="report_line report_level_3">
+                                        <span class="report_no">a)</span>
+                                        <span class="report_text">Manpower</span>
+                                    </div>
+
+                                </div>
+
+                                <table class="pdf_manpower_table">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="7">Status Manpower</th>
+                                        </tr>
+                                        <tr>
+                                            <th>MCU Process</th>
+                                            <th>Input Berkas</th>
+                                            <th>Induction Process</th>
+                                            <th>ID Card Process Mutation</th>
+                                            <th>ID Card</th>
+                                            <th>WASKAT</th>
+                                            <th>Note</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td><t t-esc="project.mcu_process"/></td>
+                                            <td><t t-esc="project.input_berkas"/></td>
+                                            <td><t t-esc="project.induction_process"/></td>
+                                            <td><t t-esc="project.id_card_process"/></td>
+                                            <td><t t-esc="project.id_card"/></td>
+                                            <td><t t-esc="project.waskat"/></td>
+                                            <td><t t-esc="project.manpower_note or ''"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <t t-foreach="tables" t-as="table">
+                                    <table class="pdf_dynamic_table">
+                                        <thead>
+                                            <tr>
+                                                <th t-att-colspan="(len(table.column_ids) if table.column_ids else 1) + 3">
+                                                    <t t-esc="table.name"/>
+                                                </th>
+                                            </tr>
+
+                                            <tr>
+                                                <th rowspan="2">Name</th>
+                                                <th rowspan="2">Position</th>
+                                                <th t-att-colspan="len(table.column_ids) if table.column_ids else 1">
+                                                    Competency Types
+                                                </th>
+                                                <th rowspan="2">Note</th>
+                                            </tr>
+
+                                            <tr>
+                                                <t t-if="table.column_ids">
+                                                    <t t-foreach="table.column_ids" t-as="col">
+                                                        <th><t t-esc="col.name"/></th>
+                                                    </t>
+                                                </t>
+                                                <t t-else="">
+                                                    <th>No Competency</th>
+                                                </t>
+                                            </tr>
+
+                                        </thead>
+
+                                        <tbody>
+                                            <t t-foreach="table.line_ids" t-as="line">
+                                                <tr>
+                                                    <td><t t-esc="line.name"/></td>
+                                                    <td><t t-esc="line.position or ''"/></td>
+
+                                                    <t t-if="table.column_ids">
+                                                        <t t-foreach="table.column_ids" t-as="col">
+                                                            <td class="pdf_check_cell">
+                                                                <t t-if="line.value_ids.filtered(lambda v: v.column_id.id == col.id and v.value)">
+                                                                    <img
+                                                                        class="pdf_check_icon"
+                                                                        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNicgaGVpZ2h0PScxNicgdmlld0JveD0nMCAwIDE2IDE2Jz48cGF0aCBkPSdNNi4xIDExLjNsLTMtMyAxLjQtMS40IDEuNiAxLjYgNC4zLTQuMyAxLjQgMS40LTUuNyA1Ljd6JyBmaWxsPSdibGFjaycvPjwvc3ZnPg=="
+                                                                    />
+                                                                </t>
+                                                            </td>
+                                                        </t>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <td></td>
+                                                    </t>
+
+                                                    <td><t t-esc="line.note or ''"/></td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </t>
+
+                                <div class="report_line report_level_3">
+                                    <span class="report_no">b)</span>
+                                    <span class="report_text">Man-Hour Record</span>
+                                </div>
+
+                                <table class="pdf_manhour_table">
+                                    <thead>
+                                        <tr>
+                                            <th>Last Week</th>
+                                            <th>This Week</th>
+                                            <th>Accumulative</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td><t t-esc="'%.0f' % (project.last_week or 0)"/></td>
+                                            <td><t t-esc="'%.0f' % (project.this_week or 0)"/></td>
+                                            <td><t t-esc="'%.0f' % (project.accumulative or 0)"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="report_line report_level_3">
+                                    <span class="report_no">c)</span>
+                                    <span class="report_text">Safety Activity</span>
+                                </div>
+
+                                <div class="pdf_safety_block">
+                                    <t t-foreach="safety" t-as="activity">
+                                        <div class="report_line report_level_4">
+                                            <span class="report_no">
+                                                <t t-esc="activity_index + 1"/>.
+                                            </span>
+                                            <span class="report_text">
+                                                <t t-esc="activity.name"/>
+                                            </span>
+                                        </div>
+
+                                        <t t-foreach="activity.line_ids" t-as="line">
+                                            <div class="report_line report_level_5">
+                                                <span class="report_no">-</span>
+                                                <span class="report_text">
+                                                    <t t-esc="line.name"/>
+                                                </span>
+                                            </div>
+                                        </t>
+                                    </t>
+                                </div>
+
+                                <div class="report_line report_level_2">
+                                    <span class="report_no">2.</span>
+                                    <span class="report_text">Issue Register</span>
+                                </div>
+
+                                <table class="pdf_issue_table">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Register</th>
+                                            <th>Description</th>
+                                            <th>Submitted By</th>
+                                            <th>Submitted Date</th>
+                                            <th>Reviewed By</th>
+                                            <th>Reviewed Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <t t-foreach="issues" t-as="issue">
+                                            <tr>
+                                                <td class="text_center">
+                                                    <t t-esc="issue_index + 1"/>
+                                                </td>
+                                                <td>
+                                                    <t t-esc="issue.register_number or ''"/>
+                                                </td>
+                                                <td>
+                                                    <t t-esc="issue.name or ''"/>
+                                                </td>
+                                                <td>
+                                                    <t t-esc="issue.submitted_by.display_name if issue.submitted_by else ''"/>
+                                                </td>
+                                                <td>
+                                                    <t t-esc="issue.submitted_date or ''"/>
+                                                </td>
+                                                <td>
+                                                    <t t-esc="issue.reviewed_by.display_name if issue.reviewed_by else ''"/>
+                                                </td>
+                                                <td>
+                                                    <t t-esc="issue.reviewed_date or ''"/>
+                                                </td>
+                                                <td>
+                                                    <t t-if="issue.status == 'open'">Submitted</t>
+                                                    <t t-if="issue.status == 'progress'">Under Review</t>
+                                                    <t t-if="issue.status == 'closed'">Solved</t>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+
+                                <div class="report_line report_level_2">
+                                    <span class="report_no">3.</span>
+                                    <span class="report_text">General Work</span>
+                                </div>
+
+                                <div class="pdf_general_block">
+                                    <t t-foreach="general" t-as="work">
+                                        <div class="report_line report_level_3">
+                                            <span class="report_no">
+                                                <t t-esc="work_index + 1"/>.
+                                            </span>
+                                            <span class="report_text">
+                                                <t t-esc="work.name"/>
+                                            </span>
+                                        </div>
+
+                                        <t t-foreach="work.line_ids" t-as="line">
+                                            <div class="report_line report_level_4">
+                                                <span class="report_no">-</span>
+                                                <span class="report_text">
+                                                    <t t-esc="line.name"/>
+                                                </span>
+                                            </div>
+                                        </t>
+                                    </t>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- PAGE 4 -->
+                        <div class="page">
+                            <div class="pdf_content_page">
+
+                                <div class="report_line report_level_1">
+                                    <span class="report_no">II.</span>
+                                    <span class="report_text">Project Overview and Summary Update Status</span>
+                                </div>
+
+                                <div class="report_line report_level_2">
+                                    <span class="report_no">1.</span>
+                                    <span class="report_text">Summary</span>
+                                </div>
+
+                                <table class="pdf_overview_table">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Work Description</th>
+                                            <th>Weight</th>
+                                            <th>Plan</th>
+                                            <th>Actual</th>
+                                            <th>Note</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <t t-foreach="overview" t-as="row">
+                                            <tr t-att-class="'overview_total' if row.get('is_total') else ''">
+                                                <td>
+                                                    <t t-esc="row.get('no') or ''"/>
+                                                </td>
+
+                                                <td class="overview_desc">
+                                                    <t t-esc="row.get('description') or ''"/>
+                                                </td>
+
+                                                <td>
+                                                    <t t-esc="'%.0f' % (row.get('weight') or 0)"/>%
+                                                </td>
+
+                                                <td>
+                                                    <t t-esc="'%.0f' % (row.get('plan') or 0)"/>%
+                                                </td>
+
+                                                <td>
+                                                    <t t-esc="'%.0f' % (row.get('actual') or 0)"/>%
+                                                </td>
+
+                                                <td>
+                                                    <t t-if="not row.get('is_total')">
+                                                        <span t-att-class="'overview_progress' if row.get('note') == 'On Progress' else 'overview_done'">
+                                                            <t t-esc="row.get('note') or ''"/>
+                                                        </span>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+
+                        <!-- PAGE 5 -->
+                        <div class="page">
+                            <div class="pdf_content_page">
+
+                                <div class="report_line report_level_1">
+                                    <span class="report_no">III.</span>
+                                    <span class="report_text">Area of Concern and Problem Identification</span>
+                                </div>
+
+                                <div class="report_line report_level_2">
+                                    <span class="report_no">1.</span>
+                                    <span class="report_text">
+                                        Activity Report Summary and Next Week's Schedule
+                                    </span>
+                                </div>
+
+                                <div class="pdf_schedule_block">
+
+                                    <div class="pdf_schedule_title">
+                                        Last Week's Tasks:
+                                    </div>
+
+                                    <t t-foreach="schedules['last_week']" t-as="line">
+                                        <div class="pdf_schedule_item">
+                                            <span class="pdf_schedule_no">
+                                                <t t-esc="line_index + 1"/>.
+                                            </span>
+                                            <span class="pdf_schedule_text">
+                                                <t t-esc="line.name"/>
+                                            </span>
+                                        </div>
+                                    </t>
+
+                                    <div class="pdf_schedule_title">
+                                        This Week's Tasks:
+                                    </div>
+
+                                    <t t-foreach="schedules['this_week']" t-as="line">
+                                        <div class="pdf_schedule_item">
+                                            <span class="pdf_schedule_no">
+                                                <t t-esc="line_index + 1"/>.
+                                            </span>
+                                            <span class="pdf_schedule_text">
+                                                <t t-esc="line.name"/>
+                                            </span>
+                                        </div>
+                                    </t>
+
+                                    <div class="pdf_schedule_title">
+                                        Planning for Next Week:
+                                    </div>
+
+                                    <t t-foreach="schedules['next_week']" t-as="line">
+                                        <div class="pdf_schedule_item">
+                                            <span class="pdf_schedule_no">
+                                                <t t-esc="line_index + 1"/>.
+                                            </span>
+                                            <span class="pdf_schedule_text">
+                                                <t t-esc="line.name"/>
+                                            </span>
+                                        </div>
+                                    </t>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- PAGE 6 -->
+                        <div class="page">
+                            <div class="pdf_content_page">
+
+                                <div class="report_line report_level_1">
+                                    <span class="report_no">IV.</span>
+                                    <span class="report_text">Attachments</span>
+                                </div>
+
+                                <div class="report_line report_level_2">
+                                    <span class="report_no">1.</span>
+                                    <span class="report_text">Material Status</span>
+                                </div>
+
+                                <div class="report_line report_level_3">
+                                    <span class="report_no">a.</span>
+                                    <span class="report_text">(Terlampir)</span>
+                                </div>
+
+                                <div class="report_line report_level_2">
+                                    <span class="report_no">2.</span>
+                                    <span class="report_text">Timeline</span>
+                                </div>
+
+                                <div class="report_line report_level_3">
+                                    <span class="report_no">a.</span>
+                                    <span class="report_text">(Terlampir)</span>
+                                </div>
+
+                                <div class="report_line report_level_2">
+                                    <span class="report_no">3.</span>
+                                    <span class="report_text">S-Curve</span>
+                                </div>
+
+                                <div class="report_line report_level_3">
+                                    <span class="report_no">a.</span>
+                                    <span class="report_text">(Terlampir)</span>
+                                </div>
+
+                                <div class="report_line report_level_2">
+                                    <span class="report_no">4.</span>
+                                    <span class="report_text">Field Activity Photos</span>
+                                </div>
+
+                                <div class="report_line report_level_3">
+                                    <span class="report_no">a.</span>
+                                    <span class="report_text">(Terlampir)</span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </main>
+
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,33 @@
+<odoo>
+
+    <record id="paperformat_weekly_report" model="report.paperformat">
+        <field name="name">Weekly Report A4</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">34</field>
+        <field name="margin_bottom">8</field>
+        <field name="margin_left">8</field>
+        <field name="margin_right">8</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">2</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="action_weekly_report_pdf"
+            model="ir.actions.report">
+
+        <field name="name">Weekly Report PDF</field>
+        <field name="model">pm.project</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">pm_report.weekly_report_pdf_template</field>
+        <field name="report_file">pm_report.weekly_report_pdf_template</field>
+        <field name="paperformat_id" ref="pm_report.paperformat_weekly_report"/>
+
+        <field name="print_report_name">
+            'Weekly Report - %s' % object.name
+        </field>
+
+    </record>
+
+</odoo>
