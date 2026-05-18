@@ -1,0 +1,8 @@
+<odoo>
+    <record id="seq_pm_issue" model="ir.sequence">
+        <field name="name">Issue Register</field>
+        <field name="code">pm.issue</field>
+        <field name="prefix">ISS-</field>
+        <field name="padding">4</field>
+    </record>
+</odoo>

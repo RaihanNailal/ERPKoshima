@@ -1,0 +1,290 @@
+<odoo>
+
+    <!-- ================= PAPERFORMAT ================= -->
+    <record id="paperformat_wbs_landscape" model="report.paperformat">
+        <field name="name">WBS Landscape</field>
+        <field name="format">A3</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+    </record>
+
+    <!-- ================= REPORT ACTION ================= -->
+    <record id="action_report_wbs" model="ir.actions.report">
+        <field name="name">WBS Report</field>
+        <field name="model">pm.project</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">pm_wbs.report_wbs_template</field>
+        <field name="report_file">pm_wbs.report_wbs_template</field>
+        <field name="print_report_name">'WBS - %s' % (object.name)</field>
+        <field name="paperformat_id" ref="pm_wbs.paperformat_wbs_landscape"/>
+    </record>
+
+    <!-- ================= TEMPLATE ================= -->
+    <template id="report_wbs_template">
+        <t t-call="web.basic_layout">
+
+            <!-- ================= SAFE CHECK ================= -->
+            <t t-if="docs and len(docs)">
+
+                <t t-set="doc" t-value="docs[0]"/>
+                <t t-set="data" t-value="doc.get_wbs_data()"/>
+
+                    <h2 style="text-align:center;">
+                        WBS - <t t-esc="doc.name"/>
+                    </h2>
+
+                    <style>
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-size: 11px;
+                            page-break-inside: auto;
+                        }
+
+                        thead {
+                            display: table-header-group;
+                        }
+
+                        tr {
+                            page-break-inside: avoid;
+                            page-break-after: auto;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-size: 11px;
+                        }
+                        th, td {
+                            border: 1px solid #000;
+                            padding: 4px;
+                            text-align: center;
+                            vertical-align: middle;
+                        }
+                        th {
+                            background: #2f3e4e;
+                            color: white;
+                        }
+                        .text-left {
+                            text-align: left;
+                        }
+                        .red {
+                            color: red;
+                        }
+                        .green {
+                            color: green;
+                            font-weight: bold;
+                        }
+                        .week-cell {
+                            padding: 0;
+                        }
+                        .week-cell div {
+                            padding: 4px 2px;
+                        }
+                        .week-cell .sch {
+                            border-bottom: 1px solid #000;
+                        }
+                        .week-cell .act {
+                            /* optional */
+                        }
+                        .prog-cell {
+                            padding: 0 !important;
+                            text-align: center;
+                            font-weight: bold;
+                        }
+
+                        .prog-cell div {
+                            padding: 4px 2px;
+                        }
+
+                        .prog-cell .sch {
+                            border-bottom: 1px solid #000;
+                        }
+                        .page {
+                            page-break-after: always;
+                        }
+                        .page:last-child {
+                            page-break-after: auto;
+                        }
+                    </style>
+
+                    <t t-set="weeks" t-value="data.get('weeks', [])"/>
+                    <t t-set="chunk_size" t-value="20"/>
+                    <t t-set="chunks"
+                        t-value="[weeks[i:i+chunk_size] for i in range(0, len(weeks), chunk_size)]"/>
+
+                    <t t-foreach="chunks" t-as="week_chunk" t-index="chunk_idx">
+                    <t t-set="offset" t-value="chunks.index(week_chunk) * chunk_size"/>
+
+                         <div class="page">
+                            <table>
+                                <thead style="display: table-header-group;">
+                                    <tr>
+                                        <th>WBS</th>
+                                        <th>TASK</th>
+                                        <th>BOBOT (%)</th>
+                                        <th>PROG</th>
+
+                                        <!-- WEEK -->
+                                        <t t-foreach="week_chunk" t-as="w">
+                                            <th>
+                                                <t t-esc="w.get('label')"/><br/>
+                                                <small><t t-esc="w.get('date')"/></small>
+                                            </th>
+                                        </t>
+
+                                        <th>KETERANGAN</th>
+                                        <th>ENGINEER</th>
+                                        <th>START</th>
+                                        <th>END</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <t t-foreach="data.get('tasks', [])" t-as="t">
+                                        <tr>
+
+                                            <!-- WBS -->
+                                            <td>
+                                                <t t-esc="t.get('wbs')"/>
+                                            </td>
+
+                                            <!-- TASK -->
+                                            <td class="text-left">
+                                                <t t-esc="t.get('name')"/>
+                                            </td>
+
+                                            <!-- WEIGHT -->
+                                            <td>
+                                                <t t-esc="t.get('weight')"/>%
+                                            </td>
+
+                                            <!-- PROG -->
+                                            <td class="prog-cell">
+                                                <div class="sch">SCH</div>
+                                                <div class="act">ACT</div>
+                                            </td>
+
+                                            <!-- WEEK (STACKED SCH + ACT) -->
+                                            <t t-foreach="t.get('weeks', [])[offset:offset + chunk_size]" t-as="w">
+                                                <td class="week-cell">
+                                                    <div class="sch">
+                                                        <t t-esc="w.get('plan', 0)"/>%
+                                                    </div>
+                                                    <div class="act">
+                                                        <t t-esc="w.get('actual', 0)"/>%
+                                                    </div>
+                                                </td>
+                                            </t>
+
+                                            <!-- KETERANGAN -->
+                                            <td>
+                                                <t t-if="t.get('keterangan') == 'Done'">
+                                                    <span class="green">Done</span>
+                                                </t>
+                                                <t t-elif="t.get('keterangan')">
+                                                    <span class="red">
+                                                        <t t-esc="t.get('keterangan')"/>%
+                                                    </span>
+                                                </t>
+                                            </td>
+
+                                            <td>
+                                                <t t-esc="t.get('pic', '')"/>
+                                            </td>
+
+                                            <!-- DATE -->
+                                            <td><t t-esc="t.get('start_date')"/></td>
+                                            <td><t t-esc="t.get('end_date')"/></td>
+
+                                        </tr>
+                                    </t>
+
+                                    <t t-if="data.get('summary')">
+
+                                        <!-- GRAND TOTAL -->
+                                        <tr style="background:#ddd; font-weight:bold;">
+
+                                            <td></td>
+                                            <td class="text-left">GRAND TOTAL</td>
+                                            <td><t t-esc="data.get('total_weight',0)"/>%</td>
+                                            <td></td>
+
+                                            <!-- weeks kosong -->
+                                            <t t-foreach="week_chunk" t-as="w">
+                                                <td></td>
+                                            </t>
+
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+
+                                        <!-- ROWS -->
+                                        <t t-set="rows" t-value="[
+                                            ('TARGET PENCAPAIAN','plan'),
+                                            ('TARGET KUMULATIF','plan_cum'),
+                                            ('REALISASI PENCAPAIAN','actual'),
+                                            ('REALISASI KUMULATIF','actual_cum'),
+                                            ('SELISIH (+/-)','deviation')
+                                        ]"/>
+
+                                        <t t-foreach="rows" t-as="r">
+                                            <tr>
+
+                                                <td></td>
+                                                <td class="text-left"><b><t t-esc="r[0]"/></b></td>
+                                                <td></td>
+                                                <td></td>
+
+                                                <!-- ✅ INI YANG DIUBAH -->
+                                                <t t-foreach="data.get('summary', [])[offset:offset + chunk_size]" t-as="s">
+                                                    <td>
+
+                                                        <t t-if="r[1] == 'deviation'">
+                                                            <span t-att-style="s.get('deviation',0) &lt; 0 and 'color:red;' or 'color:green;'">
+                                                                <t t-esc="round(s.get('deviation',0),2)"/>%
+                                                            </span>
+                                                        </t>
+
+                                                        <t t-else="">
+                                                            <t t-esc="round(s.get(r[1],0),2)"/>%
+                                                        </t>
+
+                                                    </td>
+                                                </t>
+
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+
+                                            </tr>
+                                        </t>
+
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+            </t>
+
+            <!-- ================= FALLBACK ================= -->
+            <t t-else="">
+                <div class="page">
+                    <h2 style="text-align:center;">
+                        WBS - <t t-esc="doc.name"/>
+                    </h2>
+                    <p style="text-align:center; color:red;">
+                        ❌ Data tidak ditemukan (docs kosong)
+                    </p>
+                </div>
+            </t>
+
+        </t>
+    </template>
+
+</odoo>

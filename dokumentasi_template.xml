@@ -1,0 +1,224 @@
+﻿<odoo>
+    <record id="paperformat_weekly_report_documentation" model="report.paperformat">
+        <field name="name">Weekly Report Documentation A4</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">0</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">0</field>
+        <field name="margin_right">0</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="action_weekly_report_documentation_pdf" model="ir.actions.report">
+        <field name="name">Weekly Report Documentation PDF</field>
+        <field name="model">pm.project</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">pm_report.weekly_report_documentation_pdf_template</field>
+        <field name="report_file">pm_report.weekly_report_documentation_pdf_template</field>
+        <field name="paperformat_id" ref="pm_report.paperformat_weekly_report_documentation"/>
+    </record>
+    <template id="weekly_report_documentation_pdf_template">
+        <html>
+            <head>
+                <meta charset="utf-8"/>
+
+                <style>
+                    @page {
+                        size: A4 portrait;
+                        margin: 0;
+                    }
+
+                    html {
+                        margin: 0;
+                        padding: 0;
+                        width: 100%;
+                        min-height: 297mm;
+                    }
+
+                    body {
+                        margin: 0;
+                        padding: 0;
+                        width: 100%;
+                        min-height: 297mm;
+                        font-family: "Times New Roman", serif;
+                    }
+
+                    .doc_page {
+                        width: 100%;
+                        min-height: 297mm;
+                        border: 1.5px solid #000;
+                        box-sizing: border-box;
+                        page-break-after: always;
+                        position: relative;
+                        overflow: hidden;
+                    }
+
+                    .doc_page:last-child {
+                        page-break-after: auto;
+                    }
+
+                    .doc_header {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        height: 21mm;
+                        border-bottom: 2px solid #000;
+                    }
+
+                    .doc_header table {
+                        width: 100%;
+                        height: 100%;
+                        border-collapse: collapse;
+                        table-layout: fixed;
+                    }
+
+                    .doc_logo_cell {
+                        width: 22%;
+                        text-align: center;
+                        vertical-align: middle;
+                    }
+
+                    .doc_title_cell {
+                        width: 56%;
+                        text-align: center;
+                        vertical-align: middle;
+                        font-size: 20pt;
+                        font-weight: bold;
+                    }
+
+                    .doc_logo {
+                        max-width: 150px;
+                        max-height: 55px;
+                        width: auto;
+                        height: auto;
+                    }
+
+                    .doc_body {
+                        position: absolute;
+                        top: 21mm;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        padding: 4mm 5mm 5mm 5mm;
+                        box-sizing: border-box;
+                    }
+
+                    .photo_table {
+                        width: 100%;
+                        border-collapse: separate;
+                        border-spacing: 3.5mm;
+                    }
+
+                    .photo_cell {
+                        width: 50%;
+                        vertical-align: top;
+                    }
+
+                    .photo_box {
+                        width: 100%;
+                        border: 1px solid #999;
+                        padding: 4px;
+                        box-sizing: border-box;
+                        text-align: center;
+                        page-break-inside: avoid;
+                    }
+
+                    .photo_box img {
+                        display: block;
+                        margin: 0 auto;
+                        max-width: 100%;
+                        max-height: 110mm;
+                        width: auto;
+                        height: auto;
+                    }
+
+                    .photo_caption {
+                        margin-top: 4px;
+                        font-size: 10pt;
+                        text-align: center;
+                        font-weight: bold;
+                        word-break: break-word;
+                    }
+                </style>
+            </head>
+
+            <body>
+
+                <t t-foreach="range(0, len(photos), 4)" t-as="page_index">
+
+                    <div class="doc_page">
+
+                        <div class="doc_header">
+                            <table>
+                                <tr>
+                                    <td class="doc_logo_cell">
+                                        <t t-if="project.logo_left">
+                                            <img
+                                                class="doc_logo"
+                                                t-att-src="'data:image/png;base64,' + project.logo_left.decode('utf-8')"
+                                            />
+                                        </t>
+                                    </td>
+
+                                    <td class="doc_title_cell">
+                                        DOKUMENTASI
+                                    </td>
+
+                                    <td class="doc_logo_cell">
+                                        <t t-if="project.logo_right">
+                                            <img
+                                                class="doc_logo"
+                                                t-att-src="'data:image/png;base64,' + project.logo_right.decode('utf-8')"
+                                            />
+                                        </t>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="doc_body">
+
+                            <table class="photo_table">
+                                <tr>
+                                    <t t-foreach="photos[page_index:page_index+2]" t-as="photo">
+                                        <td class="photo_cell">
+                                            <div class="photo_box">
+                                                <img t-att-src="'data:image/png;base64,' + photo['image']"/>
+                                                <div class="photo_caption">
+                                                    <t t-esc="photo['name']"/>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </t>
+                                </tr>
+
+                                <tr>
+                                    <t t-foreach="photos[page_index+2:page_index+4]" t-as="photo">
+                                        <td class="photo_cell">
+                                            <div class="photo_box">
+                                                <img t-att-src="'data:image/png;base64,' + photo['image']"/>
+                                                <div class="photo_caption">
+                                                    <t t-esc="photo['name']"/>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </t>
+
+            </body>
+        </html>
+    </template>
+</odoo>
+

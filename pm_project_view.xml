@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- TREE VIEW -->
+        <record id="view_pm_project_tree_scurve" model="ir.ui.view">
+            <field name="name">pm.project.tree.scurve</field>
+            <field name="model">pm.project</field>
+            <field name="arch" type="xml">
+                <list string="Projects" create="false" edit="false" delete="false">
+
+                    <field name="name"/>
+                    <field name="leader_id" widget="many2one_avatar_user"/>
+
+                    <button name="action_view_scurve"
+                            type="object"
+                            class="o_scurve_link"
+                            string="📊 S-Curve"/>
+                </list>
+            </field>
+        </record>
+
+        
+
+        <!-- ACTION -->
+        <record id="action_pm_scurve_selector" model="ir.actions.act_window">
+            <field name="name">S-Curve Projects</field>
+            <field name="res_model">pm.project</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="view_pm_project_tree_scurve"/>
+        </record>
+
+        <!-- MENU -->
+        <menuitem id="menu_pm_scurve"
+            name="S-Curve"
+            parent="pm_project.menu_pm_root"
+            action="action_pm_scurve_selector"
+            sequence="12"
+            groups="base.group_system,pm_core.group_pm_director,pm_core.group_pm_leader,pm_core.group_pm_engineer,pm_core.group_pm_client"/>
+
+    </data>
+</odoo>
