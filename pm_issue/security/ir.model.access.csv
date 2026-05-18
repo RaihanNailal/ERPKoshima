@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pm_issue_director,pm.issue.director,model_pm_issue,pm_core.group_pm_director,1,1,1,1
+access_pm_issue_leader,pm.issue.leader,model_pm_issue,pm_core.group_pm_leader,1,1,1,1
+access_pm_issue_admin,pm.issue.admin,model_pm_issue,base.group_system,1,1,1,1
+access_issue_assign_wizard_director,issue.assign.director,model_pm_issue_assign_wizard,pm_core.group_pm_director,1,1,1,1
+access_issue_assign_wizard_leader,issue.assign.leader,model_pm_issue_assign_wizard,pm_core.group_pm_leader,1,1,1,1
+access_issue_assign_wizard_admin,issue.assign.admin,model_pm_issue_assign_wizard,base.group_system,1,1,1,1
+access_pm_issue_photo_director,issue.photo.director,model_pm_issue_photo,pm_core.group_pm_director,1,1,1,1
+access_pm_issue_photo_leader,issue.photo.leader,model_pm_issue_photo,pm_core.group_pm_leader,1,1,1,1
+access_pm_issue_photo_admin,issue.photo.admin,model_pm_issue_photo,base.group_system,1,1,1,1
+access_pm_issue_engineer,pm.issue.engineer,model_pm_issue,pm_core.group_pm_engineer,1,1,1,0
+access_pm_issue_photo_engineer,issue.photo.engineer,model_pm_issue_photo,pm_core.group_pm_engineer,1,1,1,1
+access_pm_issue_client,pm.issue.client,model_pm_issue,pm_core.group_pm_client,1,0,0,0
+access_pm_issue_photo_client,issue.photo.client,model_pm_issue_photo,pm_core.group_pm_client,1,0,0,0

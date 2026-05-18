@@ -1,0 +1,67 @@
+<odoo>
+
+<!-- DIRECTOR -->
+<record id="rule_issue_director_all"
+model="ir.rule">
+
+ <field name="name">
+   Director All Issues
+ </field>
+
+ <field name="model_id"
+ ref="model_pm_issue"/>
+
+ <field name="groups"
+ eval="[(4,
+ ref('pm_core.group_pm_director'))]"/>
+
+ <field name="domain_force">
+   [(1,'=',1)]
+ </field>
+
+</record>
+
+
+
+<!-- LEADER -->
+<record id="rule_issue_leader_own"
+model="ir.rule">
+
+ <field name="name">
+   Leader Own Issues
+ </field>
+
+ <field name="model_id"
+ ref="model_pm_issue"/>
+
+ <field name="groups"
+ eval="[(4,
+ ref('pm_core.group_pm_leader'))]"/>
+
+ <field name="domain_force">
+ [
+ ('project_id.leader_id',
+   '=',
+   user.id)
+ ]
+ </field>
+
+</record>
+
+<record id="rule_issue_client_visible" model="ir.rule">
+    <field name="name">Client Visible Issues</field>
+
+    <field name="model_id" ref="model_pm_issue"/>
+
+    <field name="groups"
+        eval="[(4, ref('pm_core.group_pm_client'))]"/>
+
+    <field name="domain_force">
+        [
+            ('is_client_visible','=',True),
+            ('project_id.client_id','=',user.id)
+        ]
+    </field>
+</record>
+
+</odoo>
