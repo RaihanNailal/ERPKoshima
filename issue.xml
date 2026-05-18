@@ -1,0 +1,396 @@
+<odoo>
+
+    <!-- =========================
+        ISSUE LIST
+    ========================== -->
+    <record id="view_pm_issue_tree" model="ir.ui.view">
+        <field name="name">pm.issue.list</field>
+        <field name="model">pm.issue</field>
+        <field name="arch" type="xml">
+
+            <list>
+
+                <field name="project_id"/>
+                <field name="name"/>
+                <field name="register_number"/>
+                <field name="submitted_date"/>
+                <field name="reviewed_by"/>
+                <field name="reviewed_date"/>
+                <field name="status"/>
+
+            </list>
+
+        </field>
+    </record>
+
+    <record id="view_pm_issue_kanban"
+    model="ir.ui.view">
+
+    <field name="name">pm.issue.kanban</field>
+    <field name="model">pm.issue</field>
+
+    <field name="arch" type="xml">
+
+    <kanban
+        default_group_by="status"
+        expand="1"
+        class="o_kanban_small_column"
+        group_create="false"
+        group_delete="false">
+
+        <field name="id"/>
+        <field name="status"/>
+        <field name="name"/>
+        <field name="register_number"/>
+        <field name="project_id"/>
+        <field name="submitted_date"/>
+
+        <templates>
+
+            <t t-name="card">
+
+                <div class="oe_kanban_global_click"
+                    style="
+                    padding:14px;
+                    border-radius:12px;
+                    background:white;
+                ">
+
+                    <strong>
+                        <field name="register_number"/>
+                    </strong>
+
+                    <div style="margin-top:8px;">
+                        <field name="name"/>
+                    </div>
+
+                    <div style="
+                    margin-top:8px;
+                    color:#666;
+                    ">
+                        <field name="project_id"/>
+                    </div>
+
+                    <div style="
+                    margin-top:10px;
+                    font-size:12px;
+                    ">
+                        <field name="submitted_date"/>
+                    </div>
+
+                </div>
+
+            </t>
+
+        </templates>
+
+    </kanban>
+
+    </field>
+    </record>
+
+    <record id="view_pm_issue_photo_form" model="ir.ui.view">
+        <field name="name">pm.issue.photo.form</field>
+        <field name="model">pm.issue.photo</field>
+        <field name="arch" type="xml">
+            <form string="Create Documentation">
+                <group>
+
+                    <field name="issue_id" invisible="1"/>
+                    <field name="type" invisible="1"/>
+
+                    <!-- 🔥 WAJIB -->
+                    <field name="note"/>
+
+                    <field name="image"/>
+                    <field name="image_name"/>
+
+                    <!-- 🔥 INFO (READONLY) -->
+                    <field name="user_id" readonly="1"/>
+                    <field name="create_date" readonly="1"/>
+
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- =========================
+        ISSUE FORM
+    ========================== -->
+    <record id="view_pm_issue_form" model="ir.ui.view">
+        <field name="name">pm.issue.form</field>
+        <field name="model">pm.issue</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+
+                    <button name="action_assign_task"
+                            type="object"
+                            string="Assign as Task"
+                            class="btn-primary"
+                            groups="pm_core.group_pm_director,pm_core.group_pm_leader,base.group_system"
+                            invisible="id == False or status != 'open' or is_converted"/>
+
+                    <button name="action_review"
+                            type="object"
+                            string="Review"
+                            class="oe_highlight"
+                            groups="pm_core.group_pm_director,pm_core.group_pm_leader,base.group_system"
+                            invisible="id == False or status != 'open'"/>
+
+                    <button name="action_resolve"
+                            type="object"
+                            string="Solve"
+                            class="btn-success"
+                            groups="pm_core.group_pm_director,pm_core.group_pm_leader,base.group_system"
+                            invisible="status != 'progress'"/>
+
+                    <field name="status" widget="statusbar"
+                           statusbar_visible="open,progress,closed"/>
+
+                </header>
+
+                <sheet>
+                    <group>
+
+                        <field name="project_id"
+                                readonly="task_id != False"
+                                required="1"
+                                options="{'no_open': True}"/>
+
+                        <field name="task_id"
+                                domain="[('project_id','=',project_id)]"
+                                readonly="status != 'open'"
+                                options="{'no_open': True, 'no_create': True, 'no_create_edit': True}"/>
+
+                        <!-- 🔒 DESCRIPTION -->
+                        <field name="name"
+                                readonly="status != 'open'"/>
+
+                        <!-- AUTO NUMBER -->
+                        <field name="register_number" readonly="1"/>
+
+                        <!-- AUTO FIELD -->
+                        <field name="submitted_by" readonly="1"/>
+                        <field name="submitted_date" readonly="1"/>
+
+                        <!-- REVIEW -->
+                        <field name="reviewed_by" readonly="1"/>
+                        <field name="reviewed_date" readonly="1"/>
+
+                        <field name="is_client_visible"
+                                widget="boolean_toggle"
+                                groups="pm_core.group_pm_director,pm_core.group_pm_leader,base.group_system"/>
+
+                        <field name="corrective_action"
+                                widget="text"
+                                invisible="status == 'open'"
+                                readonly="converted_task_id or status == 'closed'"
+                                placeholder="Corrective action"/>
+
+                    </group>
+
+                    <group string="Dokumentasi Issue (Before)">
+
+                        <field name="photo_ids"
+                            nolabel="1"
+                            context="{'default_issue_id': id, 'default_type': 'before'}">
+                            <kanban editable="bottom">
+                                <field name="image"/>
+                                <field name="image_name"/>
+                                <field name="note"/>
+                                <field name="user_id"/>
+                                <field name="create_date"/>
+
+                                <templates>
+
+                                    <t t-name="card">
+
+                                    <div style="padding:8px;">
+
+                                        <img t-if="record.image.raw_value"
+                                            t-att-src="'/web/image/pm.issue.photo/' + record.id.raw_value + '/image'"
+                                            style="width:130px;height:80px;object-fit:cover;border-radius:6px;"
+                                            alt="Issue Image"/>
+
+                                        <div style="margin-top:6px; font-weight:500;">
+                                            <field name="note"/>
+                                        </div>
+
+                                        <div style="font-size:11px; color:#666;">
+                                            <field name="user_id"/>
+                                        </div>
+
+                                        <div style="font-size:11px; color:#999;">
+                                            <field name="create_date"/>
+                                        </div>
+
+                                    </div>
+
+                                    </t>
+
+                                </templates>
+
+                            </kanban>
+                        </field>
+
+                    </group>
+
+                    <group string="Dokumentasi Issue (After)"
+                        invisible="converted_task_id">
+
+                        <field name="after_photo_ids"
+                            nolabel="1"
+                            context="{
+                                'default_issue_id': id,
+                                'default_type': 'after'
+                            }">
+
+                            <kanban editable="bottom">
+
+                                <field name="image"/>
+                                <field name="image_name"/>
+                                <field name="note"/>
+
+                                <templates>
+                                    <t t-name="card">
+
+                                        <div style="padding:8px;">
+
+                                            <img t-if="record.image.raw_value"
+                                                t-att-src="'/web/image/pm.issue.photo/' + record.id.raw_value + '/image'"
+                                                style="width:130px;height:80px;object-fit:cover;border-radius:6px;"
+                                                alt="After Image"/>
+
+                                            <div style="margin-top:6px; font-weight:500;">
+                                                <field name="note"/>
+                                            </div>
+
+                                            <div style="font-size:11px; color:#666;">
+                                                <field name="user_id"/>
+                                            </div>
+
+                                            <div style="font-size:11px; color:#999;">
+                                                <field name="create_date"/>
+                                            </div>
+
+                                        </div>
+
+                                    </t>
+                                </templates>
+
+                            </kanban>
+
+                        </field>
+
+                    </group>
+
+                    <group string="Dokumentasi Issue (After)"
+                        invisible="not converted_task_id">
+
+                        <field name="task_photo_ids"
+                            nolabel="1"
+                            readonly="1">
+
+                            <kanban>
+                                <field name="image"/>
+                                <field name="image_name"/>
+                                <field name="note"/>
+                                <field name="user_id"/>
+                                <field name="create_date"/>
+
+                                <templates>
+                                    <t t-name="card">
+                                        <div style="
+                                            width:150px;
+                                            padding:6px;
+                                            background:white;
+                                            border:1px solid #ddd;
+                                            border-radius:8px;
+                                            text-align:center;
+                                        ">
+
+                                            <img t-if="record.image.raw_value"
+                                                t-att-src="'/web/image/pm.task.photo/' + record.id.raw_value + '/image'"
+                                                alt="After Documentation"
+                                                style="
+                                                    width:130px;
+                                                    height:80px;
+                                                    object-fit:cover;
+                                                    border-radius:6px;
+                                                "/>
+
+                                            <div style="margin-top:6px; font-weight:500;">
+                                                <field name="note"/>
+                                            </div>
+
+                                            <div style="font-size:11px; color:#666;">
+                                                <field name="user_id"/>
+                                            </div>
+
+                                            <div style="font-size:11px; color:#999;">
+                                                <field name="create_date"/>
+                                            </div>
+
+                                        </div>
+                                    </t>
+                                </templates>
+
+                            </kanban>
+
+                        </field>
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_pm_issue_search"
+            model="ir.ui.view">
+        <field name="name">pm.issue.search</field>
+        <field name="model">pm.issue</field>
+
+        <field name="arch" type="xml">
+            <search>
+
+                <field name="project_id"/>
+                <field name="name"/>
+                <field name="register_number"/>
+
+                <filter
+                    string="Project"
+                    name="group_project"
+                    context="{'group_by':'project_id'}"/>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pm_issue_project"
+            model="ir.actions.act_window">
+
+        <field name="name">Issue Register</field>
+        <field name="res_model">pm.issue</field>
+
+        <!-- list dulu baru form -->
+        <field name="view_mode">list,kanban,form</field>
+
+        <field name="search_view_id"
+            ref="view_pm_issue_search"/>
+
+        <!-- auto group by project -->
+        <field name="context">
+            {'search_default_group_project':1}
+        </field>
+
+    </record>
+
+    <menuitem id="menu_pm_issue"
+        name="Issue Register"
+        parent="pm_project.menu_pm_root"
+        action="action_pm_issue_project"
+        sequence="13"
+        groups="base.group_system,pm_core.group_pm_director,pm_core.group_pm_leader,pm_core.group_pm_client"/>
+
+</odoo>

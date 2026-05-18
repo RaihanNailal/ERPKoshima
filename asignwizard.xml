@@ -1,0 +1,27 @@
+<odoo>
+
+    <record id="view_issue_assign_wizard" model="ir.ui.view">
+        <field name="name">pm.issue.assign.wizard.form</field>
+        <field name="model">pm.issue.assign.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Assign Engineer">
+                <group>
+                    <field name="task_name"/>
+                    <field name="engineer_id"/>
+                </group>
+
+                <footer>
+                    <button name="action_confirm"
+                            type="object"
+                            string="Assign"
+                            class="btn-primary"/>
+
+                    <button string="Cancel"
+                            special="cancel"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+</odoo>
