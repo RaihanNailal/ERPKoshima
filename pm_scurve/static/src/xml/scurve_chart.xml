@@ -1,0 +1,489 @@
+<templates xml:space="preserve">
+    <t t-name="pm_scurve.ScurveChart" owl="1">
+
+        <div class="d-flex flex-column main-container scurve-container">
+
+            <!-- ================= HEADER ================= -->
+            <div class="bg-white border-bottom p-3">
+
+                <div class="scurve-header">
+
+                    <div class="logo-left">
+                        <t t-if="state.logo_left">
+                            <img t-att-src="'data:image/png;base64,' + state.logo_left"/>
+                        </t>
+                    </div>
+
+                    <div class="title">
+                        <h2>S-Curve</h2>
+                    </div>
+
+                    <div class="logo-right">
+                        <t t-if="state.logo_right">
+                            <img t-att-src="'data:image/png;base64,' + state.logo_right"/>
+                        </t>
+                    </div>
+
+                </div>
+
+                <div class="row mt-2" style="font-size:14px;">
+
+                    <!-- KIRI -->
+                    <div class="col-5">
+                        <table class="table table-sm table-borderless mb-0">
+                            <tr>
+                                <td class="fw-bold header-label" style="width:140px;">PEKERJAAN</td>
+                                <td>:</td>
+                                <td><t t-esc="state.project_name"/></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold header-label">PENYEDIA</td>
+                                <td>:</td>
+                                <td><t t-esc="state.vendor"/></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold header-label">NOMOR PO</td>
+                                <td>:</td>
+                                <td><t t-esc="state.po_number"/></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- TENGAH -->
+                    <div class="col-4">
+                        <table class="table table-sm table-borderless mb-0">
+                            <tr>
+                                <td class="fw-bold header-label" style="width:120px;">MINGGU KE</td>
+                                <td>:</td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-outline-primary dropdown-toggle"
+                                                data-bs-toggle="dropdown">
+                                            <t t-esc="state.selected_week_label"/>
+                                        </button>
+
+                                        <ul class="dropdown-menu">
+                                            <t t-foreach="state.weeks_header || []" t-as="w" t-key="w.num">
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                       t-on-click.prevent="() => this.selectWeek(w)">
+                                                        W<t t-esc="w.num"/> - <t t-esc="w.label"/>
+                                                    </a>
+                                                </li>
+                                            </t>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="fw-bold header-label">TANGGAL</td>
+                                <td>:</td>
+                                <td>
+                                    <t t-if="state.selected_week">
+                                        <t t-esc="this.formatWeekRange(state.selected_week.date)"/>
+                                    </t>
+                                    <t t-else="">-</t>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- KANAN -->
+                    <div class="col-3 text-end pe-4">
+                        <table class="table table-sm table-borderless mb-0">
+                            <tr>
+                                <td class="fw-bold">START</td>
+                                <td>:</td>
+                                <td><t t-esc="state.project_start or '-'"/></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">END</td>
+                                <td>:</td>
+                                <td><t t-esc="state.project_end or '-'"/></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">REMAINING</td>
+                                <td>:</td>
+                                <td>
+                                    <span t-att-class="(state.remaining_days || 0) &lt;= 3 ? 'text-danger fw-bold' : 'fw-bold'">
+                                        <t t-esc="state.remaining_days"/> HARI
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-end mb-3 gap-2">
+
+                        <button
+                            class="btn btn-primary"
+                            t-on-click="exportPDF">
+                            EXPORT PDF
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <hr style="margin:10px 0;"/>
+
+            </div>
+
+            <!-- ================= CONTENT ================= -->
+            <div class="p-4">
+                <div class="card shadow-sm">
+                    <div class="table-responsive">
+
+                        <div t-if="state.weeks_header.length" class="table-wrapper position-relative">
+
+                            <canvas t-ref="overlayCanvas"
+                                    style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;">
+                            </canvas>
+
+                            <table class="table table-bordered table-sm mb-0 text-center">
+
+                                <!-- HEADER -->
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">NO</th>
+                                        <th rowspan="2">TASK</th>
+                                        <th rowspan="2">BOBOT (%)</th>
+                                        <th rowspan="2">PROG</th>
+
+                                        <t t-foreach="state.weeks_header || []" t-as="w" t-key="w.num">
+                                            <th>
+                                                W<t t-esc="w.num"/><br/>
+                                                <small>(<t t-esc="w.date"/>)</small>
+                                            </th>
+                                        </t>
+
+                                        <th rowspan="2">KETERANGAN</th>
+                                    </tr>
+                                </thead>
+
+                                <!-- BODY -->
+                                <tbody>
+                                    <t t-foreach="state.tasks || []" t-as="task" t-key="task.id">
+
+                                        <tr class="sch-row">
+                                            <td rowspan="2"><t t-esc="task.no"/></td>
+                                            <td rowspan="2" class="text-start fw-bold"><t t-esc="task.name"/></td>
+                                            <td rowspan="2"><t t-esc="task.weight"/>%</td>
+
+                                            <td class="fw-bold">SCH</td>
+
+                                            <t t-foreach="task.weekly || []" t-as="w" t-key="w.date">
+                                                <td>
+                                                    <t t-esc="formatNum(w.plan)"/>%
+                                                </td>
+                                            </t>
+
+                                            <td rowspan="2">
+                                                <t t-if="task.keterangan === 'Done'">
+                                                    <span class="text-success fw-bold">Done</span>
+                                                </t>
+                                            </td>
+                                        </tr>
+
+                                        <tr class="act-row">
+                                            <td class="fw-bold">ACT</td>
+                                            <t t-foreach="task.weekly || []" t-as="w" t-key="w.date">
+                                                <td>
+                                                    <t t-esc="formatNum(w.actual)"/>%
+                                                </td>
+                                            </t>
+                                        </tr>
+
+                                    </t>
+                                </tbody>
+
+                                <!-- SUMMARY -->
+                                <tfoot t-if="state.summary.length" class="border-top border-3 bg-light">
+
+                                    <tr class="fw-bold">
+                                        <td></td>
+                                        <td class="text-start">GRAND TOTAL</td>
+                                        <td>
+                                            <t t-esc="formatNum(state.total_weight)"/>%
+                                        </td>
+                                        <td></td>
+
+                                        <t t-foreach="state.weeks_header || []" t-as="w" t-key="w.num">
+                                            <td></td>
+                                        </t>
+                                        <td></td>
+                                    </tr>
+
+                                    <tr class="fw-bold">
+                                        <td></td>
+                                        <td colspan="3" class="text-start">TARGET PENCAPAIAN</td>
+                                        <t t-foreach="state.summary || []" t-as="s" t-key="s.date">
+                                            <td><t t-esc="formatNum(s.plan)"/>%</td>
+                                        </t>
+                                        <td></td>
+                                    </tr>
+
+                                    <tr class="fw-bold">
+                                        <td></td>
+                                        <td colspan="3" class="text-start">TARGET KUMULATIF</td>
+                                        <t t-foreach="state.summary || []" t-as="s" t-key="s.date">
+                                            <td><t t-esc="formatNum(s.plan_cum)"/>%</td>
+                                        </t>
+                                        <td></td>
+                                    </tr>
+
+                                    <tr class="fw-bold">
+                                        <td></td>
+                                        <td colspan="3" class="text-start">REALISASI PENCAPAIAN</td>
+                                        <t t-foreach="state.summary || []" t-as="s" t-key="s.date">
+                                            <td><t t-esc="formatNum(s.actual)"/>%</td>
+                                        </t>
+                                        <td></td>
+                                    </tr>
+
+                                    <tr class="fw-bold">
+                                        <td></td>
+                                        <td colspan="3" class="text-start">REALISASI KUMULATIF</td>
+                                        <t t-foreach="state.summary || []" t-as="s" t-key="s.date">
+                                            <td><t t-esc="formatNum(s.actual_cum)"/>%</td>
+                                        </t>
+                                        <td></td>
+                                    </tr>
+
+                                    <tr class="fw-bold">
+                                        <td></td>
+                                        <td colspan="3" class="text-start">SELISIH (+/-)</td>
+
+                                        <t t-foreach="state.summary || []" t-as="s" t-key="s.date">
+
+                                            <td class="text-center">
+
+                                                <t t-set="limit_week"
+                                                t-value="state.selected_week ? state.selected_week.num : state.current_week"/>
+
+                                                <t t-set="idx"
+                                                t-value="state.summary.indexOf(s) + 1"/>
+
+                                                <t t-if="idx &lt;= limit_week">
+
+                                                    <span t-att-class="s.deviation &lt; 0 ? 'text-danger' : 'text-success'">
+
+                                                        <t t-esc="formatNum(s.deviation)"/>%
+
+                                                    </span>
+
+                                                </t>
+
+                                                <t t-else="">
+                                                    <span class="text-muted">-</span>
+                                                </t>
+
+                                            </td>
+
+                                        </t>
+                                        
+                                        <td></td>
+                                    </tr>
+
+                                </tfoot>
+
+                            </table>
+
+                        </div>
+
+                        <div t-else="" class="text-center p-5">
+                            Task Kosong
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= SIGNATURE EDITABLE ================= -->
+            <div class="mt-5 px-5">
+
+                <!-- anti browser autofill hack -->
+                <form autocomplete="off">
+
+                    <!-- dummy hidden trap untuk chrome -->
+                    <input type="text"
+                        style="display:none"
+                        tabindex="-1"/>
+
+                    <input type="password"
+                        style="display:none"
+                        tabindex="-1"/>
+
+
+                    <div class="row text-center">
+
+                        <!-- ================= KIRI ================= -->
+                        <div class="col-6">
+
+                            <!-- TEMPAT TANGGAL -->
+                            <div class="mb-2">
+                                <input type="text"
+                                    name="sig_left_date"
+                                    class="signature-text small"
+                                    placeholder="Tempat, Tanggal"
+
+                                    autocomplete="new-password"
+                                    autocorrect="off"
+                                    autocapitalize="off"
+                                    spellcheck="false"
+
+                                    t-model="state.sign_left_date"
+                                    t-on-blur="(ev) => this.updateSignature('sign_left_date', ev)"/>
+                            </div>
+
+                            <p class="mt-2">
+                                Diajukan oleh,
+                            </p>
+
+
+                            <!-- COMPANY -->
+                            <div>
+                                <input type="text"
+                                    name="sig_left_company"
+                                    class="signature-text"
+                                    placeholder="Nama Perusahaan"
+
+                                    autocomplete="new-password"
+                                    autocorrect="off"
+                                    autocapitalize="off"
+                                    spellcheck="false"
+
+                                    t-model="state.sign_left_company"
+                                    t-on-blur="(ev) => this.updateSignature('sign_left_company', ev)"/>
+                            </div>
+
+
+                            <div style="height:70px;"></div>
+
+
+                            <!-- NAME -->
+                            <div style="
+                                display:flex;
+                                justify-content:center;
+                                align-items:center;
+                            ">
+                                <span>(</span>
+
+                                <input type="text"
+                                    name="sig_left_name"
+                                    class="signature-input"
+
+                                    autocomplete="new-password"
+                                    autocorrect="off"
+                                    autocapitalize="off"
+                                    spellcheck="false"
+
+                                    t-model="state.sign_left_name"
+                                    t-on-blur="(ev) => this.updateSignature('sign_left_name', ev)"/>
+
+                                <span>)</span>
+                            </div>
+
+
+                            <!-- POSITION -->
+                            <div class="mt-1">
+                                <input type="text"
+                                    name="sig_left_position"
+                                    class="signature-text"
+                                    placeholder="Jabatan"
+
+                                    autocomplete="new-password"
+                                    autocorrect="off"
+                                    autocapitalize="off"
+                                    spellcheck="false"
+
+                                    t-model="state.sign_left_position"
+                                    t-on-blur="(ev) => this.updateSignature('sign_left_position', ev)"/>
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ================= KANAN ================= -->
+                        <div class="col-6">
+
+                            <div style="height:20px;"></div>
+
+                            <p class="mt-2">
+                                Disetujui oleh,
+                            </p>
+
+
+                            <!-- COMPANY -->
+                            <div>
+                                <input type="text"
+                                    name="sig_right_company"
+                                    class="signature-text"
+                                    placeholder="Nama Perusahaan"
+
+                                    autocomplete="new-password"
+                                    autocorrect="off"
+                                    autocapitalize="off"
+                                    spellcheck="false"
+
+                                    t-model="state.sign_right_company"
+                                    t-on-blur="(ev) => this.updateSignature('sign_right_company', ev)"/>
+                            </div>
+
+
+                            <div style="height:70px;"></div>
+
+
+                            <!-- NAME -->
+                            <div style="
+                                display:flex;
+                                justify-content:center;
+                                align-items:center;
+                            ">
+                                <span>(</span>
+
+                                <input type="text"
+                                    name="sig_right_name"
+                                    class="signature-input"
+
+                                    autocomplete="new-password"
+                                    autocorrect="off"
+                                    autocapitalize="off"
+                                    spellcheck="false"
+
+                                    t-model="state.sign_right_name"
+                                    t-on-blur="(ev) => this.updateSignature('sign_right_name', ev)"/>
+
+                                <span>)</span>
+                            </div>
+
+
+                            <!-- POSITION -->
+                            <div class="mt-1">
+                                <input type="text"
+                                    name="sig_right_position"
+                                    class="signature-text"
+                                    placeholder="Jabatan"
+
+                                    autocomplete="new-password"
+                                    autocorrect="off"
+                                    autocapitalize="off"
+                                    spellcheck="false"
+
+                                    t-model="state.sign_right_position"
+                                    t-on-blur="(ev) => this.updateSignature('sign_right_position', ev)"/>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </t>
+</templates>

@@ -1,0 +1,319 @@
+/* =========================
+   HEADER (CLEAN & MODERN)
+========================= */
+.scurve-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+}
+
+.scurve-header .logo-left img,
+.scurve-header .logo-right img {
+    height: 50px;
+    object-fit: contain;
+}
+
+.scurve-header .title {
+    flex: 1;
+    text-align: center;
+}
+
+.scurve-header .title h2 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1e293b;
+    letter-spacing: 0.5px;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+.main-container {
+    border: 3px solid #2563eb;
+    border-radius: 16px;
+    padding: 15px;
+    background: #ffffff;
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+    overflow: visible !important;
+    min-height: auto !important;
+}
+
+/* =========================
+   TABLE WRAPPER (OVERLAY FIX)
+========================= */
+.table-wrapper{
+    position: relative;
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+.table-wrapper canvas {
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:3;
+    overflow:visible;
+}
+
+.table-wrapper table {
+    position: relative;
+    z-index: 2;
+}
+
+/* =========================
+   TABLE HEADER
+========================= */
+.table thead th {
+    background: #1e293b;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+/* =========================
+   TABLE BODY CLEAN
+========================= */
+.table tbody td {
+    background: #ffffff !important;
+}
+
+/* hover */
+.table tbody tr:hover td {
+    background: #f1f5f9 !important;
+}
+
+/* hilangkan bold random */
+.table tbody tr.sch-row td,
+.table tbody tr.act-row td {
+    font-weight: 400 !important;
+}
+
+/* kolom kiri tetap normal */
+.table tbody tr.sch-row td:nth-child(-n+3),
+.table tbody tr.act-row td:nth-child(-n+3) {
+    background: #ffffff !important;
+    font-weight: 500;
+}
+
+/* =========================
+   SUMMARY
+========================= */
+tfoot tr {
+    background: #f8fafc;
+}
+
+tfoot td {
+    font-weight: 600;
+}
+
+/* =========================
+   TEXT COLOR
+========================= */
+.text-danger {
+    color: #dc2626 !important;
+}
+
+.text-success {
+    color: #16a34a !important;
+}
+
+/* =========================
+   BORDER
+========================= */
+.table-bordered td,
+.table-bordered th {
+    border: 1px solid #e5e7eb;
+}
+
+/* =========================
+   CARD
+========================= */
+.card {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* =========================
+   DROPDOWN
+========================= */
+.dropdown-toggle {
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.dropdown-menu {
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* =========================
+   HEADER LABEL
+========================= */
+.header-label {
+    font-weight: 700 !important;
+    color: #020617 !important;
+    letter-spacing: 0.3px;
+}
+
+/* =========================
+   LAYOUT FIX ODOO
+========================= */
+.o_action_manager,
+.o_content {
+    overflow: auto !important;
+}
+
+/* =========================
+   OPTIONAL: HIGHLIGHT WEEK
+========================= */
+.highlight-week {
+    background: #dbeafe !important;
+    border-top: 2px solid #3b82f6;
+    border-bottom: 2px solid #3b82f6;
+}
+
+.signature-line {
+    min-height: 20px;
+    outline: none;
+    position: relative;
+}
+
+/* 🔥 MAGIC PLACEHOLDER */
+.signature-line:empty::before {
+    content: attr(data-placeholder);
+    color: #9ca3af;
+    font-style: italic;
+    pointer-events: none;
+}
+
+/* =========================
+   SIGNATURE STYLE (FIX FINAL)
+========================= */
+
+/* container biar rapi & center */
+.signature-container {
+    text-align: center;
+}
+
+/* TANPA GARIS */
+.signature-text {
+    border: none;
+    outline: none;
+    background: transparent;
+    text-align: center;
+    min-width: 220px;
+}
+
+/* DENGAN GARIS (HANYA NAMA) */
+.signature-input {
+    border: none;
+    border-bottom: 1.5px solid #1e293b;
+    outline: none;
+    background: transparent;
+
+    text-align: center;
+    min-width: 220px;
+}
+
+/* ukuran kecil (tanggal) */
+.signature-input.small {
+    font-size: 12px;
+    min-width: 260px;
+}
+
+/* focus effect (biar modern) */
+.signature-input:focus {
+    border-bottom: 1.5px solid #2563eb;
+}
+
+/* wrapper nama (biar sejajar sama kurung) */
+.signature-name-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+/* kurung */
+.signature-name-wrapper span {
+    font-weight: 500;
+}
+
+/* jarak antar elemen */
+.signature-spacing {
+    height: 70px;
+}
+
+/* biar gak ketarik full width dari bootstrap */
+input.signature-input {
+    width: auto !important;
+}
+
+/* =========================
+   REMOVE OLD STYLE (PENTING)
+========================= */
+
+/* matiin efek lama */
+.signature-line {
+    display: none;
+}
+
+/* =========================
+   SCURVE BUTTON STYLE (SAMA KAYAK TIMELINE)
+========================= */
+
+.o_scurve_link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    background: #6366f1;
+    color: white !important;
+
+    padding: 6px 12px;
+    border-radius: 999px;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+
+/* 🔥 HOVER EFFECT */
+.o_scurve_link:hover {
+    background: #4f46e5;
+
+    transform: translateY(-2px); /* naik dikit */
+    box-shadow: 0 6px 14px rgba(99, 102, 241, 0.35);
+
+    color: white !important;
+}
+
+/* 🔥 ACTIVE (klik) */
+.o_scurve_link:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+
+.chart-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 120px; /* 🔥 ini biar ga kena kolom Keterangan */
+    bottom: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.chart-area canvas {
+    width: 100%;
+    height: 100%;
+}
