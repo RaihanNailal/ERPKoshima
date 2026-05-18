@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wbs_week_director,wbs.week.director,model_pm_wbs_task_week,pm_core.group_pm_director,1,1,1,1
+access_wbs_week_leader,wbs.week.leader,model_pm_wbs_task_week,pm_core.group_pm_leader,1,1,1,1
+access_wbs_week_admin,wbs.week.admin,model_pm_wbs_task_week,base.group_system,1,1,1,1
+access_wbs_week_engineer,wbs.week.engineer,model_pm_wbs_task_week,pm_core.group_pm_engineer,1,1,1,0
