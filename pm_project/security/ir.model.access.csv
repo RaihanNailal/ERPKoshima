@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pm_project_director,pm.project.director,model_pm_project,pm_core.group_pm_director,1,1,1,1
+access_pm_project_leader,pm.project.leader,model_pm_project,pm_core.group_pm_leader,1,1,1,1
+access_pm_project_engineer,pm.project.engineer,model_pm_project,pm_core.group_pm_engineer,1,0,0,0
+access_pm_project_client,pm.project.client,model_pm_project,pm_core.group_pm_client,1,0,0,0
+access_pm_project_admin,pm.project.admin,model_pm_project,base.group_system,1,1,1,1
