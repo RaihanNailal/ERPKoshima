@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_pm_project_tree_gantt_selector" model="ir.ui.view">
+            <field name="name">pm.project.tree.gantt.selector</field>
+            <field name="model">pm.project</field>
+            <field name="arch" type="xml">
+                <list string="Projects" create="false" edit="false" delete="false" class="pm-project-list">
+
+                    <field name="name"/>
+                    <field name="leader_id" widget="many2one_avatar_user"/>
+
+                    <button name="%(action_gantt_js_client)d"
+                            string="📅 Timeline"
+                            type="action"
+                            class="btn btn-primary btn-sm"
+                            context="{'project_id': id, 'project_name': name}"/>
+
+                </list>
+            </field>
+        </record>
+
+        <record id="action_pm_gantt_selector" model="ir.actions.act_window">
+            <field name="name">Timeline Projects</field>
+            <field name="res_model">pm.project</field>
+            <field name="view_mode">list</field> <field name="view_id" ref="view_pm_project_tree_gantt_selector"/> 
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Belum ada proyek.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_gantt_js_client" model="ir.actions.client">
+            <field name="name">Project Timeline</field>
+            <field name="tag">pm_gantt.gantt_js_action</field>
+        </record>
+
+        <record id="paperformat_gantt_a3_landscape" model="report.paperformat">
+            <field name="name">Gantt A3 Landscape</field>
+            <field name="format">custom</field>
+
+            <field name="page_width">297</field>
+            <field name="page_height">420</field>
+
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="dpi">96</field>
+        </record>
+
+        <record id="action_gantt_pdf_a3_internal" model="ir.actions.report">
+            <field name="name">Gantt A3 PDF Internal</field>
+            <field name="model">pm.project</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">pm_gantt.gantt_pdf_template</field>
+            <field name="report_file">pm_gantt.gantt_pdf_template</field>
+            <field name="paperformat_id" ref="pm_gantt.paperformat_gantt_a3_landscape"/>
+        </record>
+
+         <menuitem id="menu_pm_gantt"
+            name="Timeline"
+            parent="pm_project.menu_pm_root"
+            action="action_pm_gantt_selector"
+            sequence="11"
+            groups="base.group_system,pm_core.group_pm_director,pm_core.group_pm_leader,pm_core.group_pm_engineer"/>
+            
+    </data>
+</odoo>

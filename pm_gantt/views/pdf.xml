@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <template id="gantt_pdf_template">
+            <t t-call="web.html_container">
+
+                <style>
+                    @page {
+                        size: A3 landscape;
+                        margin: 5mm;
+                    }
+
+                    body {
+                        font-family: "Arial", sans-serif;
+                        margin: 0;
+                        padding: 0;
+                        color: #000;
+                    }
+
+                    .timeline-wrapper {
+                        width: 100%;
+                    }
+
+                    /* ================= HEADER ================= */
+
+                    .timeline-header {
+                        width: 100%;
+                        border-collapse: collapse;
+                        table-layout: fixed;
+                        margin-bottom: 6mm;
+                    }
+
+                    .timeline-header td {
+                        vertical-align: middle;
+                    }
+
+                    .logo-left {
+                        width: 28%;
+                        text-align: left;
+                    }
+
+                    .title-center {
+                        width: 44%;
+                        text-align: center;
+                        font-size: 20px;
+                        font-weight: bold;
+                        color: #0f172a;
+                    }
+
+                    .logo-right {
+                        width: 28%;
+                        text-align: right;
+                    }
+
+                    .logo-img-left {
+                        max-height: 32mm;
+                        max-width: 120mm;
+                        width: auto;
+                    }
+
+                    .logo-img-right {
+                        max-height: 28mm;
+                        max-width: 75mm;
+                        width: auto;
+                    }
+
+                    .header-line {
+                        border-bottom: 2px solid #cbd5e1;
+                        margin-bottom: 5mm;
+                    }
+
+                    /* ================= INFO BLOCK ================= */
+
+                    .project-info {
+                        width: 100%;
+                        border-collapse: collapse;
+                        table-layout: fixed;
+                        margin-bottom: 6mm;
+                    }
+
+                    .project-info {
+                        width: 100%;
+                        border-collapse: collapse;
+                        table-layout: fixed;
+                        margin-bottom: 6mm;
+                    }
+
+                    .project-info > tbody > tr > td {
+                        vertical-align: top;
+                        padding: 0;
+                    }
+
+                    .info-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+
+                    .info-table td {
+                        padding: 2px 0;
+                        font-size: 11px;
+                        vertical-align: top;
+                    }
+
+                    .info-left {
+                        width: 28%;
+                        padding-right: 12mm;
+                    }
+
+                    .info-center {
+                        width: 44%;
+                        text-align: center;
+                    }
+
+                    .info-right {
+                        width: 28%;
+                        padding-left: 12mm;
+                    }
+
+                    .info-center .info-table {
+                        width: auto;
+                        margin: 0 auto;
+                    }
+
+                    .info-right .info-table {
+                        width: auto;
+                        margin-left: auto;
+                    }
+
+                    .label {
+                        font-weight: bold;
+                        width: 28mm;
+                        white-space: nowrap;
+                    }
+
+                    .sep {
+                        width: 4mm;
+                        text-align: center;
+                    }
+
+                    /* ================= TABLE ================= */
+
+                    .timeline-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        table-layout: fixed;
+                        font-size: 8px;
+                    }
+
+                    .timeline-table th,
+                    .timeline-table td {
+                        border: 1px solid #cbd5e1;
+                        text-align: center;
+                        padding: 2px;
+                        vertical-align: middle;
+                        line-height: 1.1;
+                    }
+
+                    .timeline-table thead th {
+                        background: #1e293b;
+                        color: white;
+                        font-weight: bold;
+                    }
+
+                    .parent {
+                        font-weight: bold;
+                        background: #f8fafc;
+                    }
+
+                    .task-name {
+                        text-align: left;
+                        padding-left: 4px;
+                        white-space: normal;
+                        word-break: break-word;
+                    }
+
+                    .bar-parent {
+                        background: #15803d;
+                    }
+
+                    .bar-child {
+                        background: #22c55e;
+                    }
+
+                    .empty {
+                        background: white;
+                    }
+
+                </style>
+
+                <div class="timeline-wrapper">
+
+                    <!-- HEADER -->
+                    <table class="timeline-header">
+                        <tr>
+                            <td class="logo-left">
+                                <t t-if="project.logo_left">
+                                    <img
+                                        class="logo-img-left"
+                                        t-att-src="'data:image/png;base64,' + project.logo_left.decode('utf-8')"
+                                    />
+                                </t>
+                            </td>
+
+                            <td class="title-center">
+                                PROJECT TIMELINE
+                            </td>
+
+                            <td class="logo-right">
+                                <t t-if="project.logo_right">
+                                    <img
+                                        class="logo-img-right"
+                                        t-att-src="'data:image/png;base64,' + project.logo_right.decode('utf-8')"
+                                    />
+                                </t>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="header-line"></div>
+
+                    <!-- PROJECT INFO -->
+                    <table class="project-info">
+                        <tr>
+
+                            <!-- LEFT -->
+                            <td class="info-left">
+                                <table class="info-table">
+                                    <tr>
+                                        <td class="label">PEKERJAAN</td>
+                                        <td class="sep">:</td>
+                                        <td>
+                                            <t t-esc="project.name or ''"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="label">PENYEDIA</td>
+                                        <td class="sep">:</td>
+                                        <td>
+                                            <t t-esc="project.vendor or ''"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="label">NOMOR PO</td>
+                                        <td class="sep">:</td>
+                                        <td>
+                                            <t t-esc="project.po_number or ''"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+
+                            <!-- CENTER -->
+                            <td class="info-center">
+                                <table class="info-table">
+                                    <tr>
+                                        <td class="label">MINGGU KE</td>
+                                        <td class="sep">:</td>
+                                        <td>
+                                            <t t-esc="'W%s' % current_week"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="label">TANGGAL</td>
+                                        <td class="sep">:</td>
+                                        <td>
+                                            <t t-esc="week_range"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+
+                            <!-- RIGHT -->
+                            <td class="info-right">
+                                <table class="info-table">
+                                    <tr>
+                                        <td class="label">START</td>
+                                        <td class="sep">:</td>
+                                        <td>
+                                            <t t-esc="project.start_date or ''"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="label">END</td>
+                                        <td class="sep">:</td>
+                                        <td>
+                                            <t t-esc="project.end_date or ''"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="label">REMAINING</td>
+                                        <td class="sep">:</td>
+                                        <td>
+                                            <t t-esc="remaining_days"/> HARI
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+
+                        </tr>
+                    </table>
+
+                    <!-- TIMELINE TABLE -->
+                    <table class="timeline-table">
+
+                        <colgroup>
+                            <col style="width:4%;"/>
+                            <col style="width:16%;"/>
+                            <col style="width:6%;"/>
+                            <col style="width:6%;"/>
+                            <col style="width:4%;"/>
+
+                            <t t-foreach="dates" t-as="d">
+                                <col/>
+                            </t>
+                        </colgroup>
+
+                        <thead>
+                            <tr>
+                                <th rowspan="2">WBS</th>
+                                <th rowspan="2">Task</th>
+                                <th rowspan="2">Start</th>
+                                <th rowspan="2">End</th>
+                                <th rowspan="2">Dur</th>
+
+                                <t t-foreach="months" t-as="m">
+                                    <th t-att-colspan="m['span']">
+                                        <t t-esc="m['name']"/>
+                                    </th>
+                                </t>
+                            </tr>
+
+                            <tr>
+                                <t t-foreach="dates" t-as="d">
+                                    <th>
+                                        <t t-esc="d.strftime('%d')"/>
+                                    </th>
+                                </t>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <t t-foreach="task_map" t-as="row">
+
+                                <tr t-att-class="'parent' if row['is_parent'] else ''">
+
+                                    <td>
+                                        <t t-esc="row['wbs']"/>
+                                    </td>
+
+                                    <td class="task-name">
+                                        <t t-esc="row['task'].name"/>
+                                    </td>
+
+                                    <td>
+                                        <t t-esc="row['task'].start_date"/>
+                                    </td>
+
+                                    <td>
+                                        <t t-esc="row['task'].end_date"/>
+                                    </td>
+
+                                    <td>
+                                        <t t-esc="(row['task'].end_date - row['task'].start_date).days + 1"/>
+                                    </td>
+
+                                    <t t-foreach="row['dates']" t-as="active">
+                                        <td t-att-class="
+                                            'bar-parent' if (active and row['is_parent'])
+                                            else 'bar-child' if active
+                                            else 'empty'
+                                        "/>
+                                    </t>
+
+                                </tr>
+
+                            </t>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </t>
+        </template>
+
+    </data>
+</odoo>

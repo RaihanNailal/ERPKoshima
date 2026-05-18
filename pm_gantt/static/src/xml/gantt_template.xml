@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="pm_gantt.GanttView">
+        <Layout display="display">
+
+            <!-- 🔥 HEADER -->
+            <div class="gantt-header"
+                style="display:flex; align-items:center;">
+
+                <!-- KIRI (kosong / spacer) -->
+                <div style="flex:1;"></div>
+
+                <!-- TENGAH (TITLE) -->
+                <div style="flex:1; text-align:center;">
+                    <h2 class="gantt-title" style="margin:0;">
+                        <t t-esc="props.action.context.project_name or 'Project Timeline'"/>
+                    </h2>
+                </div>
+
+                <!-- KANAN (BUTTON) -->
+                <div style="flex:1; display:flex; justify-content:flex-end; gap:10px;">
+                    <button class="btn btn-success"
+                            t-on-click="exportExcel">
+                        Excel
+                    </button>
+
+                    <button class="btn btn-outline-primary"
+                            t-on-click="exportPDF">
+                        PDF
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- 🔥 GANTT -->
+            <div class="pm-gantt-container">
+                <div t-ref="ganttContainer"
+                    class="frappe-gantt-container"
+                    style="width:100%; height:100%;"/>
+            </div>
+
+        </Layout>
+    </t>
+
+</templates>
