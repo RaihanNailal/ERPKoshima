@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_task_director,task.director,model_pm_task,pm_core.group_pm_director,1,1,1,1
+access_task_engineer,task.engineer,model_pm_task,pm_core.group_pm_engineer,1,1,0,0
+access_task_leader,task.leader,model_pm_task,pm_core.group_pm_leader,1,1,1,1
+access_task_super,task.super,model_pm_task,base.group_system,1,1,1,1
+access_pm_task_photo_director,task.photo.director,model_pm_task_photo,pm_core.group_pm_director,1,1,1,1
+access_pm_task_photo_engineer,task.photo.engineer,model_pm_task_photo,pm_core.group_pm_engineer,1,1,1,1
+access_pm_task_note_director,task.note.director,model_pm_task_note,pm_core.group_pm_director,1,1,1,1
+access_pm_task_note_engineer,task.note.engineer,model_pm_task_note,pm_core.group_pm_engineer,1,1,1,1
+access_pm_task_note_admin,task.note.admin,model_pm_task_note,base.group_system,1,1,1,1
+access_pm_task_note_leader,task.note.leader,model_pm_task_note,pm_core.group_pm_leader,1,0,0,0
+access_pm_task_photo_admin,task.photo.admin,model_pm_task_photo,base.group_system,1,1,1,1
+access_pm_task_photo_leader,task.photo.leader,model_pm_task_photo,pm_core.group_pm_leader,1,1,1,0
