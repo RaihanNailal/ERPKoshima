@@ -1,0 +1,83 @@
+<odoo>
+<data>
+
+    <!-- ================= DIRECTOR ================= -->
+    <record id="rule_director_all_tasks"
+            model="ir.rule">
+
+        <field name="name">
+            Director All Tasks
+        </field>
+
+        <field name="model_id"
+               ref="pm_task.model_pm_task"/>
+
+        <field name="groups"
+            eval="[(4,
+             ref('pm_core.group_pm_director'))]"/>
+
+        <field name="domain_force">
+            [(1,'=',1)]
+        </field>
+
+    </record>
+
+    <!-- ================= LEADER ================= -->
+    <record id="rule_leader_own_task"
+            model="ir.rule">
+
+        <field name="name">
+            Leader Own Task
+        </field>
+
+        <field name="model_id"
+            ref="pm_task.model_pm_task"/>
+
+        <field name="groups"
+        eval="[(4,
+        ref('pm_core.group_pm_leader'))]"/>
+
+        <field name="domain_force">
+            [('project_id.leader_id','=',user.id)]
+        </field>
+
+    </record>
+
+    <!-- ================= ENGINEER ================= -->
+    <record id="rule_engineer_own_task"
+            model="ir.rule">
+
+        <field name="name">
+            Engineer Own Task Only
+        </field>
+
+        <field name="model_id"
+               ref="pm_task.model_pm_task"/>
+
+        <field name="groups"
+            eval="[(4,
+             ref('pm_core.group_pm_engineer'))]"/>
+
+        <field name="domain_force">
+            [('pic_id','=',user.id)]
+        </field>
+
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+
+    </record>
+
+    <!-- ENGINEER -->
+    <record id="rule_engineer_related_project" model="ir.rule">
+        <field name="name">Engineer Related Project</field>
+        <field name="model_id" ref="model_pm_project"/>
+        <field name="groups" eval="[(4, ref('pm_core.group_pm_engineer'))]"/>
+        <field name="domain_force">
+            [('task_ids.pic_id','=',user.id)]
+        </field>
+    </record>
+
+</data>
+</odoo>

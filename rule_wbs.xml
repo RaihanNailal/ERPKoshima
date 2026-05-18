@@ -1,0 +1,60 @@
+<odoo>
+
+<!-- DIRECTOR -->
+<record id="rule_wbs_director_all"
+model="ir.rule">
+
+ <field name="name">
+   Director All WBS
+ </field>
+
+ <field name="model_id"
+ ref="model_pm_wbs_task_week"/>
+
+ <field name="groups"
+ eval="[(4,
+ ref('pm_core.group_pm_director'))]"/>
+
+ <field name="domain_force">
+   [(1,'=',1)]
+ </field>
+
+</record>
+
+
+
+<!-- LEADER -->
+<record id="rule_wbs_leader_own"
+model="ir.rule">
+
+ <field name="name">
+   Leader Own WBS
+ </field>
+
+ <field name="model_id"
+ ref="model_pm_wbs_task_week"/>
+
+ <field name="groups"
+ eval="[(4,
+ ref('pm_core.group_pm_leader'))]"/>
+
+ <field name="domain_force">
+ [
+ ('task_id.project_id.leader_id',
+   '=',
+   user.id)
+ ]
+ </field>
+
+</record>
+
+<record id="rule_engineer_wbs" model="ir.rule">
+    <field name="name">Engineer WBS</field>
+    <field name="model_id" ref="model_pm_wbs_task_week"/>
+    <field name="groups" eval="[(4, ref('pm_core.group_pm_engineer'))]"/>
+    <field name="domain_force">
+        [('task_id.pic_id','=',user.id)]
+    </field>
+</record>
+
+</odoo>
